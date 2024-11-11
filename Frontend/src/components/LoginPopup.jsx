@@ -1,16 +1,16 @@
 // src/components/LoginPopup.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons from react-icons
 import '../styles/SignupPopup.css'; // You can reuse the same styles
 
-const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
+const LoginPopup = ({ onClose, onLoginSuccess }) => {
   const [role, setRole] = useState('users'); // Default to user role
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,15 +26,17 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
         email, password
       });
 
+      // On successful login, store the token and user ID
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data.userId);
 
       alert('Login successful');
-      onLoginSuccess();
-      onClose();
+      onLoginSuccess(); // Notify parent of successful login
+      onClose(); // Close the popup
     } catch (error) {
+      // Show specific error message based on the response from the server
       const errorMessage = error.response?.data?.error || 'An error occurred. Please try again.';
-      alert(errorMessage);
+      alert(errorMessage); // Show the error message
     }
   };
 
@@ -68,7 +70,7 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
           <label>Password</label>
           <div className="password-container">
             <input
-              type={passwordVisible ? "text" : "password"}
+              type={passwordVisible ? "text" : "password"} // Toggle password visibility
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -77,15 +79,13 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
             <button
               type="button"
               className="eye-icon"
-              onClick={() => setPasswordVisible(!passwordVisible)}
+              onClick={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
             >
-              {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+              {passwordVisible ? <FaEyeSlash /> : <FaEye />} {/* Toggle between eye and eye-slash */}
             </button>
           </div>
           <button type="submit">Login</button>
         </form>
-
-        <p onClick={onSwapToSignup} className="swap-link">Don't have an account? <span className="underline">Signup</span></p>
       </div>
     </div>
   );

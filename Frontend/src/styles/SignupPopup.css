@@ -126,7 +126,7 @@ input {
   padding: 14px 16px;
   border-radius: 8px;
   border: 1px solid #dfe2e6;
-  background-color: white;
+  background-color: white !important;
   width: 100%;
   margin-bottom: 20px;
   font-family: "DM Sans", sans-serif;
@@ -158,4 +158,50 @@ button[type="submit"] {
   border-radius: 8px;
   width: 100%;
   margin-top: 24px;
+}
+
+
+input:-webkit-autofill {
+  background-color: white !important; /* Ensure autofill background is white */
+  color: #141A26 !important; /* Ensure autofill text color is correct */
+  -webkit-text-fill-color: #141A26 !important; /* Ensures autofill text color */
+  border: 1px solid #dfe2e6 !important; /* Consistent border */
+  box-shadow: none !important; /* Remove the autofill shadow */
+}
+
+/* Remove any additional background styles that autofill may apply */
+input:-webkit-autofill::after {
+  background-color: white !important; /* Force background to white */
+}
+
+/* Handle the autofill issue during focus */
+input:focus:-webkit-autofill {
+  background-color: white !important; /* Override background color */
+  color: #141A26 !important; /* Override text color */
+  -webkit-text-fill-color: #141A26 !important; /* Ensures autofill text color */
+  border: 1px solid #dfe2e6 !important; /* Maintain consistent border */
+}
+
+/* Focus styling for general input */
+input:focus {
+  background-color: white !important; /* Ensure background is white */
+  color: #141A26 !important; /* Text color */
+  border: 1px solid #dfe2e6 !important; /* Border color */
+  box-shadow: none !important; /* Remove any focus shadow */
+}
+
+/* For password input autofill */
+input[type="password"]:-webkit-autofill {
+  background-color: white !important; /* Override autofill background to white */
+  color: #141A26 !important; /* Override autofill text color */
+  -webkit-text-fill-color: #141A26 !important; /* Ensure text stays dark */
+  border: 1px solid #dfe2e6 !important; /* Border */
+}
+
+/* For email input autofill */
+input[type="email"]:-webkit-autofill {
+  background-color: white !important; /* Force background to white */
+  color: #141A26 !important; /* Text color */
+  -webkit-text-fill-color: #141A26 !important; /* Text color */
+  border: 1px solid #dfe2e6 !important; /* Border */
 }
