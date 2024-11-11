@@ -1,0 +1,74 @@
+/* src/styles/Header.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "DM Sans", sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 64px;
+  background-color: white;
+  align-items: center;
+  width: 100vw;
+}
+
+.header-left .logo {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: "DM Sans", sans-serif;
+  color: #373f51;
+  letter-spacing: -0.5px;
+}
+
+.header-right {
+  display: flex;
+  gap: 0px;
+}
+
+.login-button,
+.signup-button {
+  font-family: "DM Sans", sans-serif;
+  display: flex;
+  padding: 11px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  color: white;
+}
+
+.login-button {
+  color: #4f46e5;
+  font-weight: bold;
+  background: white;
+  border: none;
+}
+
+.signup-button {
+  border: 1px solid #818cf8;
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+}
+
+.signup-button:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.login-button:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.login-button:focus,
+.signup-button:focus {
+  outline: none;
+  box-shadow: none;
+}
