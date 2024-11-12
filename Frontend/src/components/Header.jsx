@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-left">
-        <span className="logo">Book Store</span>
+        <span className="logo">Novelle</span>
       </div>
       <div className="header-right">
         <button className="login-button" onClick={handleLoginClick}>Login</button>
