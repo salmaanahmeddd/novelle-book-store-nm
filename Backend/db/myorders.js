@@ -8,7 +8,7 @@ const myOrderSchema = new mongoose.Schema({
     totalAmount: String,
     seller: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Seller' // Referencing Seller model
+        ref: 'Seller'
     },
     sellerId: String, 
     bookTitle: String,
@@ -29,7 +29,7 @@ const myOrderSchema = new mongoose.Schema({
         type: Date,
         default: () => {
             const currentDate = new Date();
-            currentDate.setDate(currentDate.getDate() + 7);  // Delivery 7 days after order date
+            currentDate.setDate(currentDate.getDate() + 7);
             return currentDate;
         }
     }

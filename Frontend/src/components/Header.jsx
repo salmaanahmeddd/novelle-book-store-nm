@@ -1,7 +1,6 @@
-// src/components/Header.jsx
 import React, { useState } from 'react';
 import LoginPopup from './LoginPopup';
-import SignupPopup from './SignupPopup'; // Assuming your SignupPopup component is here
+import SignupPopup from './SignupPopup';
 import '../styles/Header.css';
 
 const Header = () => {

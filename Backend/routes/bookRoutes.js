@@ -1,14 +1,13 @@
-// Backend/routes/bookRoutes.js
+
 const express = require('express');
-const Book = require('../db/book');  // Import the Book model
-const multer = require('multer');  // For handling file uploads
-const { verifySellerToken } = require('../middleware/verifySellerToken'); // Middleware for JWT verification
+const Book = require('../db/book'); 
+const multer = require('multer'); 
+const { verifySellerToken } = require('../middleware/verifySellerToken'); 
 const router = express.Router();
 
-// Set up storage for itemImage uploads using multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');  // Ensure this folder exists
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '-' + file.originalname);
@@ -17,11 +16,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// POST: Add a new book (only for authenticated sellers)
+
 router.post('/add', verifySellerToken, upload.single('itemImage'), async (req, res) => {
     const { title, author, genre, description, price } = req.body;
     const itemImage = req.file ? req.file.path : null;
-    const sellerId = req.sellerId; // This will be added to the req object from JWT middleware
+    const sellerId = req.sellerId;
 
     try {
         const newBook = new Book({
@@ -32,7 +31,7 @@ router.post('/add', verifySellerToken, upload.single('itemImage'), async (req, r
             description,
             price,
             sellerId,
-            sellerName: req.sellerName // Ensure seller name is passed from the JWT middleware
+            sellerName: req.sellerName
         });
 
         await newBook.save();
@@ -42,7 +41,7 @@ router.post('/add', verifySellerToken, upload.single('itemImage'), async (req, r
     }
 });
 
-// GET: Retrieve all books with optional filters (genre, author)
+
 router.get('/', async (req, res) => {
     const { genre, author } = req.query;
     const filter = {};
@@ -57,7 +56,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET: Retrieve a specific book by ID
+
 router.get('/:id', async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
@@ -68,7 +67,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// PUT: Update a book by ID (only for authenticated sellers)
+
 router.put('/update/:id', verifySellerToken, upload.single('itemImage'), async (req, res) => {
     const { title, author, genre, description, price } = req.body;
     const updateData = { title, author, genre, description, price };
@@ -86,7 +85,7 @@ router.put('/update/:id', verifySellerToken, upload.single('itemImage'), async (
     }
 });
 
-// DELETE: Delete a book by ID (only for authenticated sellers)
+
 router.delete('/delete/:id', verifySellerToken, async (req, res) => {
     try {
         const deletedBook = await Book.findByIdAndDelete(req.params.id);

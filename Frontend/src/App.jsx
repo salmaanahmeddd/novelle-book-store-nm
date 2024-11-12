@@ -9,7 +9,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login/:role" element={<div>Login Page</div>} />
-        {/* Add other routes for user/seller login */}
       </Routes>
     </Router>
   );

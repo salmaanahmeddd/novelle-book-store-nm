@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const wishlistItemSchema = new mongoose.Schema({
     itemId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Book' // Referencing Book model for wishlist items
+        ref: 'Book'
     },
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' // Referencing User model
+        ref: 'User'
     },
     userName: String,
     itemImage: String,

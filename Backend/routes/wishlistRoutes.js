@@ -1,9 +1,7 @@
-// Backend/routes/wishlistRoutes.js
 const express = require('express');
-const WishlistItem = require('../db/wishlistitems');  // Import the WishlistItem model
+const WishlistItem = require('../db/wishlistitems');
 const router = express.Router();
 
-// POST: Add item to wishlist
 router.post('/add', async (req, res) => {
   const { itemId, userId, userName, itemImage, title } = req.body;
 
@@ -23,7 +21,6 @@ router.post('/add', async (req, res) => {
   }
 });
 
-// GET: Get all wishlist items for a user
 router.get('/:userId', async (req, res) => {
   try {
     const wishlistItems = await WishlistItem.find({ userId: req.params.userId }).populate('itemId', 'title author genre price'); // Populating book details
@@ -36,7 +33,6 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
-// DELETE: Remove an item from the wishlist
 router.delete('/remove/:id', async (req, res) => {
   try {
     const removedItem = await WishlistItem.findByIdAndDelete(req.params.id);

@@ -1,4 +1,3 @@
-// src/components/SignupPopup.jsx
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';

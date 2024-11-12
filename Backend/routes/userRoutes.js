@@ -1,4 +1,3 @@
-// Backend/routes/userRoutes.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -6,28 +5,23 @@ const User = require('../db/user');
 
 const router = express.Router();
 
-// Register new user
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
     });
 
-    // Save user to the database
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully' });
 
@@ -40,25 +34,21 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if the email format is correct
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: 'No user found with this email' });
     }
 
-    // Compare password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Incorrect password' });
     }
 
-    // Create JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({ token, userId: user._id });
 
@@ -67,7 +57,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get all users (Admin)
 router.get('/all', async (req, res) => {
   try {
     const users = await User.find();
@@ -79,7 +68,7 @@ router.get('/all', async (req, res) => {
 
 
 router.get('/profile', async (req, res) => {
-    const { email } = req.query; // Assuming email is passed as a query parameter
+    const { email } = req.query;
   
     if (!email) {
       return res.status(400).json({ message: 'Email is required' });

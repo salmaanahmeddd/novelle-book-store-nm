@@ -1,7 +1,5 @@
-// Backend/db/seller/add-item.js
 const mongoose = require('mongoose');
 
-// Define the schema for the items (books) added by sellers
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -17,29 +15,28 @@ const bookSchema = new mongoose.Schema({
     },
     itemImage: {
         type: String,
-        required: false, // Image is optional initially
+        required: false,
     },
     description: {
         type: String,
-        required: false, // Description is optional
+        required: false,
     },
     price: {
         type: String,
-        required: true,  // Price is a required field
+        required: true,
     },
     sellerId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Seller' // Reference to the Seller model
+        ref: 'Seller'
     },
     sellerName: {
         type: String,
-        required: true,  // Seller's name (who is adding the book)
+        required: true,
     },
     dateAdded: {
         type: Date,
-        default: Date.now  // Timestamp for when the item was added
+        default: Date.now
     }
 });
 
-// Export the model for use in other parts of the application
 module.exports = mongoose.model('Book', bookSchema);

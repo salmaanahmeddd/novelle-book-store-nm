@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const MyOrders = require('../db/myorders'); // Adjust path to MyOrders model if needed
+const MyOrders = require('../db/myorders'); 
 
-// Place a new order
 router.post('/place', async (req, res) => {
     const {
         flatno, pincode, city, state, totalAmount, seller, sellerId, bookTitle, bookAuthor,
@@ -34,7 +33,6 @@ router.post('/place', async (req, res) => {
     }
 });
 
-// Get all orders
 router.get('/', async (req, res) => {
     try {
         const orders = await MyOrders.find().populate('seller').populate('userId');
@@ -44,7 +42,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get a specific order by ID
 router.get('/:id', async (req, res) => {
     try {
         const order = await MyOrders.findById(req.params.id).populate('seller').populate('userId');
@@ -55,7 +52,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Delete an order by ID
 router.delete('/:id', async (req, res) => {
     try {
         const deletedOrder = await MyOrders.findByIdAndDelete(req.params.id);

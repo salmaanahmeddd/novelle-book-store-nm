@@ -1,7 +1,7 @@
 // src/pages/Home.jsx
 import React, { useState } from 'react';
 import Header from '../components/Header';
-import SignupPopup from '../components/SignupPopup'; // Import the signup popup component
+import SignupPopup from '../components/SignupPopup';
 import '../styles/Home.css';
 
 const Home = () => {
@@ -19,7 +19,6 @@ const Home = () => {
     <div className="home">
       <Header onSignupClick={handleSignupClick} />
       {showSignupPopup && <SignupPopup onClose={handleClosePopup} />}
-      {/* Add other content for the home page here */}
     </div>
   );
 };
