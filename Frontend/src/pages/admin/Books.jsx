@@ -59,6 +59,7 @@ const Books = () => {
           <div className="books-author">Author</div>
           <div className="books-genre">Genre</div>
           <div className="books-price">Price</div>
+          <div className="books-seller">Seller</div> {/* New Seller column */}
           <div className="books-action">Action</div>
         </div>
 
@@ -69,6 +70,7 @@ const Books = () => {
             <div className="books-author">{book.author}</div>
             <div className="books-genre">{book.genre}</div>
             <div className="books-price">{book.price}</div>
+            <div className="books-seller">{book.sellerId?.name || 'N/A'}</div> {/* Display Seller Name */}
             <div className="books-action">
               <img src="/menu-action.svg" alt="Action" className="books-action-icon" />
             </div>

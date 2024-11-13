@@ -61,8 +61,9 @@ router.get('/', async (req, res) => {
     if (author) filter.author = author;
 
     try {
-        const books = await Book.find(filter);
-        res.status(200).json(books); // Return all books or filtered ones
+        // Populate sellerName from the sellerId reference
+        const books = await Book.find(filter).populate('sellerId', 'name');
+        res.status(200).json(books);
     } catch (err) {
         res.status(400).json({ error: 'Failed to fetch books', details: err.message });
     }

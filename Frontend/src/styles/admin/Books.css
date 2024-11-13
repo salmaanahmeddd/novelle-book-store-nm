@@ -96,8 +96,17 @@
   min-width: 150px;
 }
 
-.books-author, .books-genre {
-  width: 22.5%;
+.books-author{
+  width: 20%;
+  min-width: 120px;
+}
+.books-seller{
+  width: 20%;
+  min-width: 120px;
+}
+
+.books-genre{
+  width: 30%;
   min-width: 120px;
 }
 
