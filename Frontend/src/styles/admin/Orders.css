@@ -1,0 +1,149 @@
+.orders-page {
+  width: 100%;
+}
+
+.orders-metrics-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.orders-metric-block {
+  display: flex;
+  width: 290px;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #FFF;
+  border: 1px solid #EBEDF0;
+  border-radius: 8px;
+}
+
+.orders-metric-label, .orders-metric-value {
+  font-family: "DM Sans", sans-serif;
+}
+
+.orders-metric-label {
+  color: #6B788E;
+  font-size: 16px;
+}
+
+.orders-metric-value {
+  color: #15294B;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+/* Table Styles */
+.orders-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid #EBEDF0;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+/* Header and Row Styles */
+.orders-table-header, .orders-table-row {
+  width: 100%;
+  display: flex;
+  padding: 12px 16px;
+  gap: 16px;
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  align-items: center;
+}
+
+.orders-table-row {
+  background: white;
+  border-top: 1px solid var(--Greys-B20, #F5F6F7);
+}
+
+.orders-table-header {
+  background: #F5F6F7;
+  font-weight: 600;
+  color: #354764;
+  text-transform: uppercase;
+}
+
+/* Column widths and truncation */
+.orders-order-id {
+  width: 10%;
+  min-width: 80px;
+}
+
+.orders-book-title, .orders-book-author, .orders-book-genre {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Specific widths for each column */
+.orders-book-title {
+  width: 20%;
+  min-width: 150px;
+}
+
+.orders-book-author, .orders-book-genre {
+  width: 15%;
+  min-width: 120px;
+}
+
+.orders-user-name {
+  width: 20%;
+  min-width: 150px;
+}
+
+.orders-email {
+  width: 25%;
+  min-width: 200px;
+}
+
+.orders-seller-name {
+  width: 15%;
+  min-width: 150px;
+}
+
+.orders-order-date, .orders-delivery-date {
+  width: 12%;
+  min-width: 120px;
+}
+
+.orders-action {
+  width: 8%;
+  min-width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orders-action-icon {
+  width: 24px;
+  cursor: pointer;
+}
+
+/* Optional for specific column text truncation */
+.orders-book-title,
+.orders-user-name,
+.orders-seller-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Styling for action button */
+.add-orders-button {
+  font-family: "DM Sans", sans-serif;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  border: 1px solid #818cf8;
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+}

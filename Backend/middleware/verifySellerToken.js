@@ -11,6 +11,7 @@ const verifySellerToken = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.sellerId = decoded.sellerId; 
     req.sellerName = decoded.sellerName; 
+    next(); // Pass control to the next middleware or route handler
   } catch (error) {
     res.status(401).json({ error: 'Invalid or expired token' });
   }

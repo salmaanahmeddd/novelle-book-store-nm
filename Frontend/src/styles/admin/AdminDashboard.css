@@ -1,0 +1,122 @@
+/* AdminDashboard.css */
+:root {
+    --Greys-B700: #243757;
+    --Greys-B30: #EBEDF0;
+    --Greys-B100: #FAFBFB;
+  }
+  
+  .admin-dashboard {
+    display: flex;
+    width: 100vw;
+    height: 100vh; /* Full height of the viewport */
+  }
+  
+  .sidebar {
+    position: fixed; /* Fix sidebar to the left */
+    display: flex;
+    width: 240px;  /* Fixed sidebar width */
+    padding: 32px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 48px;
+    background-color: #fff;
+    height: 100vh;  /* Full height of the viewport */
+  }
+  
+  .logo {
+    color: #141A26;
+    font-family: "DM Sans", sans-serif;
+    font-size: 24px;
+    font-weight: 1000;
+    line-height: 100%;
+    letter-spacing: -0.48px;
+  }
+  
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+  }
+  
+  .nav-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    padding: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  
+  .nav-link .icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .nav-link .text {
+    color: var(--Greys-B700);
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 100%;
+    letter-spacing: -0.32px;
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    background: var(--Greys-B30);
+  }
+  
+  .main-content {
+    margin-left: 240px; /* Push content to the right of the sidebar */
+    flex-grow: 1; /* Makes sure it takes up the remaining space */
+    height: 100vh; /* Full height */
+    overflow-y: scroll; /* Allows scrolling when content overflows */
+    background-color: #FAFBFB;
+  }
+  
+  /* Hide scrollbars */
+  .main-content::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .topbar {
+    background-color: white;
+    height: 60px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .user-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 24px;
+    height: calc(100vh - 60px); /* Makes content section fit under the topbar */
+    overflow-y: scroll; /* Allow scrolling in the content area */
+    background-color: #FAFBFB; /* Adjust background if needed */
+    color: #243757; /* Dark color for text */
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+}
+
+  /* Hide scrollbar on the content as well */
+  .content::-webkit-scrollbar {
+    display: none;
+  }
+  

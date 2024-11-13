@@ -1,0 +1,123 @@
+.books-page {
+  width: 100%;
+}
+
+.books-metrics-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.books-metric-block {
+  display: flex;
+  width: 290px;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #FFF;
+  border: 1px solid #EBEDF0;
+  border-radius: 8px;
+}
+
+.books-metric-label, .books-metric-value {
+  font-family: "DM Sans", sans-serif;
+}
+
+.books-metric-label {
+  color: #6B788E;
+  font-size: 16px;
+}
+
+.books-metric-value {
+  color: #15294B;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+/* Table Styles */
+.books-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid #EBEDF0;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+/* Header and Row Styles */
+.books-table-header, .books-table-row {
+  display: flex;
+  padding: 12px 16px;
+  gap: 16px;
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  align-items: center;
+}
+
+.books-table-row{
+  background: white;
+  border-top: 1px solid var(--Greys-B20, #F5F6F7);
+}
+
+.books-table-header {
+  background: #F5F6F7;
+  font-weight: 600;
+  color: #354764;
+  text-transform: uppercase;
+}
+
+/* Column widths and truncation */
+.books-sno {
+  width: 5%; /* Adjust as needed */
+  min-width: 64px;
+}
+
+.books-action {
+  width: 5%; /* Adjust as needed */
+  min-width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.books-title, .books-author, .books-genre, .books-price {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Specific widths for each column */
+.books-title {
+  width: 25%;
+  min-width: 150px;
+}
+
+.books-author, .books-genre {
+  width: 22.5%;
+  min-width: 120px;
+}
+
+.books-price {
+  width: 15%;
+  min-width: 80px;
+}
+
+.books-action-icon {
+  width: 24px;
+  cursor: pointer;
+}
+
+.add-book-button {
+  font-family: "DM Sans", sans-serif;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  border: 1px solid #818cf8;
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+}
