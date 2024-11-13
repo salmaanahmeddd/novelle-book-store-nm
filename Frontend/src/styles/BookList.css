@@ -1,0 +1,83 @@
+/* Container for the list of books */
+.books-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content:space-around;
+    padding: 64px;
+    background: var(--Greys-B20, #F5F6F7); /* Background color */
+  }
+  
+  /* Individual book item container */
+  .book-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    width: 243px; /* Width for each book container */
+    border-radius: 8px;
+  }
+  
+  /* Book image styling */
+  .book-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensures the image covers the container */
+    border-radius: 8px;
+  }
+  
+  /* Book details section */
+  .book-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%; /* Ensure it stretches fully */
+  }
+  
+  /* Title styling */
+  .book-details h3 {
+    color: var(--colors-black-600, #30343F);
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+  
+  /* Author, Price, and Genre styling */
+  .book-details p {
+    color: var(--colors-black-500, #4C505A);
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.12px;
+    margin: 0;
+  }
+  
+  /* Price styling to make it stand out */
+  .book-details p.price {
+    color: var(--colors-black-600, #30343F);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.5px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .book-item {
+      width: 48%; /* 2 books per row on mobile */
+    }
+  
+    .books-list {
+      gap: 24px; /* Reduce the gap for mobile */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .book-item {
+      width: 100%; /* 1 book per row on very small screens */
+    }
+  }
+  
