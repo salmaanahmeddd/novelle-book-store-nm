@@ -17,7 +17,7 @@ const app = express();
 
 // Correctly configure CORS to allow credentials and set specific origin
 const corsOptions = {
-    origin: 'http://localhost:5173', // Or wherever the front end is being served for development
+    origin: 'https://novelle-store.vercel.app', // Or wherever the front end is being served for development
     credentials: true, // To allow cookies to be sent and received
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
