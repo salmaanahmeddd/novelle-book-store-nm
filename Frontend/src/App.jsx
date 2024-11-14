@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-axios.defaults.withCredentials = true;
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminDashboardLayout from './layouts/AdminDashboardLayout';
@@ -9,44 +7,22 @@ import Users from './pages/admin/Users';
 import Sellers from './pages/admin/Sellers';
 import Books from './pages/admin/Books';
 import Orders from './pages/admin/Orders';
-import AdminLogin from './components/AdminLogin';
+// Import AdminLogin if needed for the future login flow
+// import AdminLogin from './components/AdminLogin';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const storedAuth = sessionStorage.getItem('isLoggedIn');
-    if (storedAuth) {
-      setIsLoggedIn(true);
-    }
-  
-    axios.get(`${import.meta.env.VITE_API_URL}/admin/check-auth`)
-      .then(response => {
-        if (response.data.authenticated) {
-          setIsLoggedIn(true);
-          sessionStorage.setItem('isLoggedIn', 'true');
-        } else {
-          setIsLoggedIn(false);
-          sessionStorage.removeItem('isLoggedIn');
-        }
-      })
-      .catch(error => {
-        console.error('Failed to verify auth:', error);
-        setIsLoggedIn(false);
-        sessionStorage.removeItem('isLoggedIn');
-      });
-  }, []);  
+  // Set isLoggedIn to true by default to skip login check
+  const isLoggedIn = true;
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login/admin" element={isLoggedIn ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin />} />
-
-        {/* Admin Layout with authentication check */}
+        
+        {/* Admin Layout without authentication check */}
         <Route
           path="/admin"
-          element={isLoggedIn ? <AdminDashboardLayout /> : <Navigate to="/login/admin" replace />}
+          element={<AdminDashboardLayout />}
         >
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
