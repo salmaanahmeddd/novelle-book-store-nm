@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminDashboardLayout from './layouts/AdminDashboardLayout';
@@ -12,21 +14,34 @@ import AdminLogin from './components/AdminLogin';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Check token presence on component load
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setIsLoggedIn(true); // Token is present, user is logged in
-    } else {
-      setIsLoggedIn(false); // No token, user is not logged in
+    const storedAuth = sessionStorage.getItem('isLoggedIn');
+    if (storedAuth) {
+      setIsLoggedIn(true);
     }
-  }, []); // Empty dependency array to run only once on mount
+  
+    axios.get(`${import.meta.env.VITE_API_URL}/admin/check-auth`)
+      .then(response => {
+        if (response.data.authenticated) {
+          setIsLoggedIn(true);
+          sessionStorage.setItem('isLoggedIn', 'true');
+        } else {
+          setIsLoggedIn(false);
+          sessionStorage.removeItem('isLoggedIn');
+        }
+      })
+      .catch(error => {
+        console.error('Failed to verify auth:', error);
+        setIsLoggedIn(false);
+        sessionStorage.removeItem('isLoggedIn');
+      });
+  }, []);  
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login/:role" element={<AdminLogin />} />
+        <Route path="/login/admin" element={isLoggedIn ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin />} />
 
         {/* Admin Layout with authentication check */}
         <Route

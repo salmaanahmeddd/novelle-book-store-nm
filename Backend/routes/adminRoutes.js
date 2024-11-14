@@ -4,6 +4,26 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../db/Admin');
 
+// Check authentication status
+router.get('/check-auth', (req, res) => {
+  const token = req.cookies.authToken;
+  console.log('Token received:', token);  // Check the token is received correctly
+  if (!token) {
+    return res.status(401).json({ authenticated: false });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Token valid, decoded info:', decoded);  // Log decoded token info
+    res.status(200).json({ authenticated: true });
+  } catch (error) {
+    console.error('Token verification error:', error);
+    res.status(401).json({ authenticated: false });
+  }
+});
+
+
+
+
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
   
@@ -39,8 +59,16 @@ router.post('/login', async (req, res) => {
     }
       
     const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Set cookie with HttpOnly flag
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: true, // Set secure to true if in production
+      sameSite: 'strict', // Helps prevent CSRF
+      maxAge:  24 * 60 * 60 * 1000  // 1 hour
+    });
   
-    res.status(200).json({ token, adminId: admin._id, message: 'Login successful' });
+    res.status(200).json({ adminId: admin._id, message: 'Login successful' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -72,5 +100,11 @@ router.get('/profile', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('authToken');
+  res.json({ message: 'Logged out successfully' });
+});
+
 
 module.exports = router;
