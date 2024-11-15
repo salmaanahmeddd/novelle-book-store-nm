@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AddSellerPopup from '../../components/admin/AddSellerPopup';
 import '../../styles/admin/Sellers.css';
 
 const Sellers = () => {
   const [sellers, setSellers] = useState([]);
+  const [showAddSellerPopup, setShowAddSellerPopup] = useState(false);
 
-  // Fetch sellers data
+  const fetchSellers = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/sellers/all`);
+      setSellers(response.data);
+    } catch (error) {
+      console.error("Error fetching sellers:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchSellers = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/sellers/all`);
-        setSellers(response.data);
-      } catch (error) {
-        console.error("Error fetching sellers:", error);
-      }
-    };
     fetchSellers();
   }, []);
-
-  // Calculate metrics
-  const totalSellers = sellers.length;
 
   return (
     <div className="sellers-page">
@@ -28,18 +27,30 @@ const Sellers = () => {
           <h2>Sellers</h2>
           <p>Manage and view all registered sellers.</p>
         </div>
-        <button className="add-sellers-button">Add Seller</button>
+        <button
+          className="add-sellers-button"
+          onClick={() => setShowAddSellerPopup(true)}
+        >
+          Add Seller
+        </button>
       </div>
 
-      {/* Metrics Section */}
+      {showAddSellerPopup && (
+        <AddSellerPopup
+          onClose={() => setShowAddSellerPopup(false)}
+          onSellerAdded={(newSeller) => {
+            setSellers((prevSellers) => [...prevSellers, newSeller]);
+          }}
+        />
+      )}
+
       <div className="sellers-metrics-wrapper">
         <div className="sellers-metric-block">
           <span className="sellers-metric-label">Total Sellers</span>
-          <span className="sellers-metric-value">{totalSellers}</span>
+          <span className="sellers-metric-value">{sellers.length}</span>
         </div>
       </div>
 
-      {/* Sellers Table */}
       <div className="sellers-table">
         <div className="sellers-table-header">
           <div className="sellers-sno">S.No</div>

@@ -138,6 +138,11 @@ input:focus {
   color: #141A26;
 }
 
+input:hover{
+  border-color: #243757;
+    box-shadow: 0 0 3px rgba(36, 55, 87, 0.4);
+    outline: none;
+}
 input::placeholder {
   color: #a6aebb;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import '../styles/SignupPopup.css';
+import '../styles/Popup.css';
 
 const LoginPopup = ({ onClose, onLoginSuccess }) => {
   const [role, setRole] = useState('users');

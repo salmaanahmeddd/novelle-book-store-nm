@@ -9,33 +9,30 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'email') setEmail(value);
-    else if (name === 'password') setPassword(value);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/admin/login`, {
         email,
         password,
       }, {
-        withCredentials: true  // Ensure credentials are sent with the request
+        withCredentials: true,
       });
-  
+
       if (response.status === 200) {
-        // Assuming setIsLoggedIn is a function that updates state stored in context or above component
-        window.location.reload();
+        navigate('/admin/dashboard');
       } else {
         setError('Login failed: No valid response from server.');
       }
     } catch (error) {
       console.error('Login error:', error.response?.data || error);
       setError(error.response?.data?.message || 'An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,32 +44,34 @@ const AdminLogin = () => {
           <label className="admin-login-label">Email</label>
           <input
             type="email"
-            name="email"
             value={email}
-            onChange={handleChange}
+            onChange={(e) => setEmail(e.target.value)}
             className="admin-login-input"
             placeholder="Enter your email"
+            required
           />
           <label className="admin-login-label">Password</label>
           <div className="admin-login-password-container">
             <input
               type={passwordVisible ? 'text' : 'password'}
-              name="password"
               value={password}
-              onChange={handleChange}
+              onChange={(e) => setPassword(e.target.value)}
               className="admin-login-input"
               placeholder="Enter your password"
+              required
             />
             <button
               type="button"
-              className="admin-eye-icon"
               onClick={() => setPasswordVisible(!passwordVisible)}
+              className="admin-eye-icon"
             >
               {passwordVisible ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
           {error && <div className="admin-error-message">{error}</div>}
-          <button type="submit" className="admin-login-button">Login</button>
+          <button type="submit" className="admin-login-button" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
       </div>
     </div>

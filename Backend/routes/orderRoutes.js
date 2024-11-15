@@ -3,7 +3,7 @@ const router = express.Router();
 const MyOrders = require('../db/myorders'); 
 const Book = require('../db/book');
 const Seller = require('../db/Seller/seller');
-const User = require('../db/user');
+const User = require('../db/customers');
 
 // Route to place an order
 router.post('/place', async (req, res) => {

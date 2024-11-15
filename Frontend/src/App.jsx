@@ -7,29 +7,25 @@ import Users from './pages/admin/Users';
 import Sellers from './pages/admin/Sellers';
 import Books from './pages/admin/Books';
 import Orders from './pages/admin/Orders';
-// Import AdminLogin if needed for the future login flow
-// import AdminLogin from './components/AdminLogin';
+import AdminLogin from './components/AdminLogin';
+import AdminPrivateRoute from './components/admin/AdminPrivateRoute';
 
 const App = () => {
-  // Set isLoggedIn to true by default to skip login check
-  const isLoggedIn = true;
-
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
         
-        {/* Admin Layout without authentication check */}
-        <Route
-          path="/admin"
-          element={<AdminDashboardLayout />}
-        >
-          <Route index element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="users" element={<Users />} />
-          <Route path="sellers" element={<Sellers />} />
-          <Route path="books" element={<Books />} />
-          <Route path="orders" element={<Orders />} />
+        {/* Admin Protected Routes */}
+        <Route path="/admin" element={<AdminPrivateRoute />}>
+          <Route path="" element={<AdminDashboardLayout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="sellers" element={<Sellers />} />
+            <Route path="books" element={<Books />} />
+            <Route path="orders" element={<Orders />} />
+          </Route>
         </Route>
       </Routes>
     </Router>

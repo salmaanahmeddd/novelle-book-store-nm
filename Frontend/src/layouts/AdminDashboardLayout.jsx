@@ -4,9 +4,10 @@ import { NavLink, Outlet } from 'react-router-dom';
 import ProfileOverlay from '../components/ProfileOverlay';
 import '../../src/styles/admin/AdminDashboard.css';
 
+
 const AdminDashboardLayout = () => {
   const [showOverlay, setShowOverlay] = useState(false);
-
+  
   const handleProfileClick = () => {
     setShowOverlay((prev) => !prev);
   };

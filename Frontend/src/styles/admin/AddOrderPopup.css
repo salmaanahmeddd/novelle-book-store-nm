@@ -1,0 +1,140 @@
+.add-order-popup__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .add-order-popup__card {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    width: 500px;
+    border-radius: 12px;
+    border: 1px solid #ebedf0;
+    background: white;
+    box-shadow: 0px 0px 8px 0px rgba(223, 226, 230, 0.25);
+    gap: 20px;
+  }
+  
+  .add-order-popup__heading {
+    font-family: "DM Sans", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #243757;
+    margin-bottom: 16px;
+  }
+  
+  .add-order-popup__label {
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #243757;
+  }
+  
+  .add-order-popup__input,
+  .add-order-popup__select {
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #dfe2e6;
+    margin-bottom: 20px;
+    font-family: "DM Sans", sans-serif;
+  }
+
+  .add-order-popup__select:focus{
+    border-color: #243757;
+    box-shadow: 0 0 3px rgba(36, 55, 87, 0.4);
+  }
+
+  .add-order-popup__select option{
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    color: #4a4e59;
+  }
+  
+  .add-order-popup__button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: "DM Sans", sans-serif;
+    cursor: pointer;
+  }
+  
+  .add-order-popup__button--submit {
+    background: #1d222d;
+    color: white;
+    border: none;
+  }
+  
+  .add-order-popup__button--submit:hover {
+    background: #313640;
+  }
+  
+  .add-order-popup__button--cancel {
+    background: #f5f5f5;
+    color: #1d222d;
+    border: 1px solid #dfe2e6;
+  }
+  
+  .add-order-popup__button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+/* Base dropdown styling */
+.add-order-popup__select {
+    appearance: none; /* Hide default browser styling */
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #dfe2e6;
+    margin-bottom: 20px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
+    color: #4a4e59; /* Default text color */
+    position: relative;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a4e59' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+  }
+  
+  /* Hover and focus styles */
+  .add-order-popup__select:focus,
+  .add-order-popup__select:hover {
+    border-color: #243757;
+    box-shadow: 0 0 3px rgba(36, 55, 87, 0.4);
+    outline: none;
+  }
+  
+  /* Placeholder styling */
+  .add-order-popup__select option[value=""][disabled] {
+    color: #a6aebb; /* Placeholder color */
+  }
+  
+  /* Options styling */
+  .add-order-popup__select option {
+    background-color: white;
+    color: #4a4e59; /* Text color */
+    font-size: 14px;
+  }
+  
+  .add-order-popup__select option:checked {
+    background-color: #243757; /* Selected option background */
+    color: white; /* Selected option text */
+  }
+  
+  /* Hover effect for options */
+  .add-order-popup__select option:hover {
+    background-color: #eef2ff;
+    color: #243757;
+  }
+  
