@@ -13,7 +13,7 @@ const Admin = require('../db/Admin');
 
 // Check authentication status
 router.get('/check-auth', (req, res) => {
-  const token = req.cookies.authToken;
+  const token = req.cookies.authToken || req.cookies["vercel-feature-flags"];
   console.log('Token received:', token);  // Check the token is received correctly
   if (!token) {
     return res.status(401).json({ authenticated: false });
