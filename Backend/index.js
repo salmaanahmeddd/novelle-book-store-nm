@@ -10,6 +10,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const userRoutes = require('./routes/customerRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');  
 const wishlistRoutes = require('./routes/wishlistRoutes'); 
+const { globalErrorHandler } = require('./middleware/globalErrorHandler');
 
 dotenv.config();
 
@@ -72,3 +73,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+app.use(globalErrorHandler)
