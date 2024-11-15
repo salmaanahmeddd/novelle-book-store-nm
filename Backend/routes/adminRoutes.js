@@ -5,15 +5,10 @@ const jwt = require('jsonwebtoken');
 const Admin = require('../db/Admin');
 
 
-// router.get('/check-auth', async (req, res) => {
-//   const token = req.cookies.authToken;
-//   console.log('Token received:', token); 
-//   res.status(200).json({message:"working"});
-// });
-
 // Check authentication status
 router.get('/check-auth', (req, res) => {
-  const token = req.cookies.authToken || req.cookies["vercel-feature-flags"];
+  const headerToken = req.headers["access-token"];
+  const token = req.cookies.authToken || headerToken;
   console.log('Token received:', token);  // Check the token is received correctly
   if (!token) {
     return res.status(401).json({ authenticated: false });
@@ -41,9 +36,9 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const newAdmin = new Admin({ name, email, password: hashedPassword });
-    await newAdmin.save();
+    const adminOBJ = await newAdmin.save();
     
-    res.status(201).json(newAdmin); 
+    res.status(201).json({...adminOBJ.toJSON(), token}); 
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -69,11 +64,11 @@ router.post('/login', async (req, res) => {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Set secure to true if in production
-      sameSite: 'Strick', // Helps prevent CSRF
+      // sameSite: 'Strick', // Helps prevent CSRF
       maxAge:  24 * 60 * 60 * 1000  // 1 hour
     });
   
-    res.status(200).json({ adminId: admin._id, message: 'Login successful' });
+    res.status(200).json({ adminId: admin._id,  token, message: 'Login successful' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
