@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import '../styles/admin/AdminLogin.css';
+import { setToken } from '../utils/storage';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -24,6 +25,8 @@ const AdminLogin = () => {
       });
 
       if (response.status === 200) {
+        const {token} = response.data;
+        setToken(token)
         navigate('/admin/dashboard');
       } else {
         setError('Login failed: No valid response from server.');
