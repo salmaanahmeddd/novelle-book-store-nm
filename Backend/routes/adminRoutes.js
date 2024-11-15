@@ -68,8 +68,8 @@ router.post('/login', async (req, res) => {
     // Set cookie with HttpOnly flag
     res.cookie('authToken', token, {
       httpOnly: true,
-      secure: true, // Set secure to true if in production
-      sameSite: 'lax', // Helps prevent CSRF
+      secure: process.env.NODE_ENV === 'production', // Set secure to true if in production
+      sameSite: 'Strick', // Helps prevent CSRF
       maxAge:  24 * 60 * 60 * 1000  // 1 hour
     });
   
