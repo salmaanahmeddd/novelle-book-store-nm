@@ -37,8 +37,8 @@ const corsOptions = {
   credentials: true, // Allow cookies to be sent
 };
 
-// Use CORS middleware
-app.use(cors());
+// Use CORS middleware  
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());

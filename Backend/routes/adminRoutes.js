@@ -4,9 +4,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../db/Admin');
 
+
+// router.get('/check-auth', async (req, res) => {
+//   const token = req.cookies.authToken;
+//   console.log('Token received:', token); 
+//   res.status(200).json({message:"working"});
+// });
+
 // Check authentication status
 router.get('/check-auth', (req, res) => {
-  const token = req.cookies.vercel-feature-flags;
+  const token = req.cookies.authToken;
   console.log('Token received:', token);  // Check the token is received correctly
   if (!token) {
     return res.status(401).json({ authenticated: false });
@@ -20,8 +27,6 @@ router.get('/check-auth', (req, res) => {
     res.status(401).json({ authenticated: false });
   }
 });
-
-
 
 
 router.post('/signup', async (req, res) => {
