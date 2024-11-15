@@ -15,15 +15,31 @@ dotenv.config();
 
 const app = express();
 
-// Correctly configure CORS to allow credentials and set specific origin
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://novelle.onrender.com',
+];
+
+// CORS options
 const corsOptions = {
-  origin: ['https://novelle-store.vercel.app', 'http://localhost:5173'], // Allowed origins
-  credentials: true, // Allow cookies and credentials
-  optionsSuccessStatus: 200 // Some legacy browsers require a 200 status instead of 204
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g., mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow cookies to be sent
 };
 
-
+// Use CORS middleware
 app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(cookieParser());
 
