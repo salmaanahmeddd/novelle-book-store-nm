@@ -17,7 +17,7 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://novelle-store.vercel.com',
+  'https://novelle-store.vercel.app',
 ];
 
 // CORS options
