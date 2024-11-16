@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../../App.css';
 
-const AddSellerPopup = ({ onClose, onSellerAdded }) => {
+const AddUserPopup = ({ onClose, onUserAdded }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,12 +23,12 @@ const AddSellerPopup = ({ onClose, onSellerAdded }) => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/sellers/register`,
+        `${import.meta.env.VITE_API_URL}/users/register`,
         formData
       );
 
-      alert('Seller registered successfully');
-      onSellerAdded(response.data);
+      alert('User registered successfully');
+      onUserAdded(response.data);
       onClose();
     } catch (error) {
       const errorMessage =
@@ -40,7 +40,7 @@ const AddSellerPopup = ({ onClose, onSellerAdded }) => {
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-        <h1 className="popup-heading">Register a New Seller</h1>
+        <h1 className="popup-heading">Register a New User</h1>
         <form onSubmit={handleSubmit} className="popup-form">
           <label className="label" htmlFor="name">Name</label>
           <input
@@ -49,7 +49,7 @@ const AddSellerPopup = ({ onClose, onSellerAdded }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Enter seller's name"
+            placeholder="Enter user's name"
             className="input-text"
             required
           />
@@ -61,7 +61,7 @@ const AddSellerPopup = ({ onClose, onSellerAdded }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Enter seller's email"
+            placeholder="Enter user's email"
             className="input-text"
             required
           />
@@ -82,7 +82,7 @@ const AddSellerPopup = ({ onClose, onSellerAdded }) => {
 
           <div className="buttons-group">
             <button type="button" className="tertiary-button" onClick={onClose}>Cancel</button>
-            <button type="button" className="secondary-button" onClick={handleSubmit}>Add Seller</button>
+            <button type="button" className="secondary-button" onClick={handleSubmit}>Add User</button>
           </div>
         </form>
       </div>
@@ -90,4 +90,4 @@ const AddSellerPopup = ({ onClose, onSellerAdded }) => {
   );
 };
 
-export default AddSellerPopup;
+export default AddUserPopup;

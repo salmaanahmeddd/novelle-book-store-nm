@@ -2,7 +2,7 @@ const express = require('express');
 const Book = require('../db/book');
 const multer = require('multer');
 const { cloudinary } = require('../cloudinaryConfig'); // Import Cloudinary configuration
-const { verifySellerToken } = require('../middleware/verifySellerToken');
+const { verifyToken } = require('../middleware/verifyToken');
 const router = express.Router();
 
 // Use memory storage for multer to store the image buffer in memory
@@ -10,7 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Route to add a new book with Cloudinary image upload
-router.post('/add', verifySellerToken, upload.single('itemImage'), async (req, res) => {
+router.post('/add', verifyToken, upload.single('itemImage'), async (req, res) => {
     const { title, author, genre, description, price } = req.body;
     const sellerId = req.sellerId;
 
@@ -80,37 +80,9 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Route to update a book with new details and optional Cloudinary image upload
-router.put('/update/:id', verifySellerToken, upload.single('itemImage'), async (req, res) => {
-    const { title, author, genre, description, price } = req.body;
-    const updateData = { title, author, genre, description, price };
-
-    try {
-        // If a new image is provided, upload it to Cloudinary
-        if (req.file) {
-            const result = await new Promise((resolve, reject) => {
-                const uploadStream = cloudinary.uploader.upload_stream(
-                    { resource_type: 'image', folder: 'books' },
-                    (error, result) => {
-                        if (error) reject(error);
-                        else resolve(result);
-                    }
-                );
-                uploadStream.end(req.file.buffer); // Upload image buffer to Cloudinary
-            });
-            updateData.itemImage = result.secure_url; // Set the new Cloudinary URL
-        }
-
-        const updatedBook = await Book.findByIdAndUpdate(req.params.id, updateData, { new: true });
-        if (!updatedBook) return res.status(404).json({ error: 'Book not found' });
-        res.status(200).json(updatedBook); // Return the updated book
-    } catch (err) {
-        res.status(400).json({ error: 'Failed to update book', details: err.message });
-    }
-});
 
 // Route to delete a book by ID
-router.delete('/delete/:id', verifySellerToken, async (req, res) => {
+router.delete('/delete/:id', verifyToken, async (req, res) => {
     try {
         const deletedBook = await Book.findByIdAndDelete(req.params.id);
         if (!deletedBook) return res.status(404).json({ error: 'Book not found' });

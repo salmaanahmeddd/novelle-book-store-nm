@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../../styles/admin/Users.css';
+import AddUserPopup from '../../components/admin/AddUserPopup'; 
+import '../../styles/admin/Users.css'// Import the popup component
+import '../../App.css';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  
+  const [showAddUserPopup, setShowAddUserPopup] = useState(false);
+
   // Fetch users data
   useEffect(() => {
     const fetchUsers = async () => {
@@ -12,7 +15,7 @@ const Users = () => {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/all`);
         setUsers(response.data);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error('Error fetching users:', error);
       }
     };
     fetchUsers();
@@ -21,6 +24,10 @@ const Users = () => {
   // Calculate metrics
   const totalUsers = users.length;
 
+  const handleAddUser = (newUser) => {
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+  };
+
   return (
     <div className="users-page">
       <div className="heading">
@@ -28,7 +35,9 @@ const Users = () => {
           <h2>Users</h2>
           <p>This page allows you to manage and view all users in the system.</p>
         </div>
-        <button className="users-add-button">Add User</button>
+        <button className="primary-button" onClick={() => setShowAddUserPopup(true)}>
+          Add User
+        </button>
       </div>
 
       {/* Metrics Section */}
@@ -59,6 +68,10 @@ const Users = () => {
           </div>
         ))}
       </div>
+
+      {showAddUserPopup && (
+        <AddUserPopup onClose={() => setShowAddUserPopup(false)} onUserAdded={handleAddUser} />
+      )}
     </div>
   );
 };

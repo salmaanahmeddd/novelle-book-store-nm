@@ -46,6 +46,7 @@
   border: 1px solid #EBEDF0;
   border-radius: 12px;
   overflow-x: auto;
+  background-color: white;
 }
 
 .sellers-table-header, .sellers-table-row {

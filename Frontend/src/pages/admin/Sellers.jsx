@@ -28,7 +28,7 @@ const Sellers = () => {
           <p>Manage and view all registered sellers.</p>
         </div>
         <button
-          className="add-sellers-button"
+          className="primary-button"
           onClick={() => setShowAddSellerPopup(true)}
         >
           Add Seller

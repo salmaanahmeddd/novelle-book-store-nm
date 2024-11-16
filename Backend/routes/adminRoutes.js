@@ -102,9 +102,65 @@ router.get('/profile', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  res.clearCookie('authToken');
+  res.clearCookie('authToken', {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    // sameSite: 'strict' // Make sure it matches the settings from when the cookie was set
+  });
   res.json({ message: 'Logged out successfully' });
 });
 
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { bookId, userId, address, state, city, pincode } = req.body;
+
+  try {
+      // Find the existing order by ID
+      const order = await MyOrders.findById(id);
+
+      if (!order) {
+          return res.status(404).json({ error: 'Order not found' });
+      }
+
+      // Update the order fields
+      if (bookId) {
+          const book = await Book.findById(bookId);
+          if (!book) {
+              return res.status(404).json({ error: 'Book not found' });
+          }
+          order.bookId = bookId;
+
+          // Update seller details from the new book
+          const seller = await Seller.findById(book.sellerId);
+          if (!seller) {
+              return res.status(404).json({ error: 'Seller not found' });
+          }
+          order.seller = seller._id;
+          order.sellerId = seller._id;
+      }
+
+      if (userId) {
+          const user = await User.findById(userId);
+          if (!user) {
+              return res.status(404).json({ error: 'User not found' });
+          }
+          order.userId = userId;
+      }
+
+      if (address) order.address = address;
+      if (state) order.state = state;
+      if (city) order.city = city;
+      if (pincode) order.pincode = pincode;
+
+      // Save the updated order
+      const updatedOrder = await order.save();
+
+      res.status(200).json({ message: 'Order updated successfully', order: updatedOrder });
+  } catch (error) {
+      console.error('Error updating order:', error);
+      res.status(500).json({ error: 'Failed to update order', details: error.message });
+  }
+});
 
 module.exports = router;

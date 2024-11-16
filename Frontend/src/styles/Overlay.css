@@ -1,0 +1,82 @@
+/* styles/ProfileOverlay.css */
+.overlay {
+  display: flex;
+  flex-direction: column;
+  width: 190px;
+  border-radius: 8px;
+  border: 1px solid var(--Greys-B30, #EBEDF0);
+  background: #FFF;
+  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.05);
+  position: absolute;
+  top: 60px; /* Adjust based on topbar height */
+  right: 20px;
+  z-index: 1000;
+}
+
+.overlay-option {
+  display: flex;
+  padding: 10px 12px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  /* border-top: 1px solid var(--Greys-B20, #F5F6F7); */
+  cursor: pointer;
+  color: #141A26;
+}
+
+.overlay-option:hover {
+  background-color: #f0f0f0;
+}
+
+.overlay-option-delete {
+  color: red;
+}
+
+.overlay-close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  font-size: 12px;
+  color: #777;
+  background: #f5f5f5;
+  border-top: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.overlay-close:hover {
+  background: #e5e5e5;
+}
+
+.orders-action-icon {
+  cursor: pointer;
+  position: relative;
+}
+
+.action-overlay {
+  position: absolute;
+  background: white;
+  border: 1px solid #ebedf0;
+  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  z-index: 1000;
+  min-width: 150px;
+}
+
+.action-overlay div {
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.action-overlay div:hover {
+  background-color: #f5f5f5;
+}
+
+.action-overlay .overlay-option-delete {
+  color: red;
+}
+
+.action-overlay .overlay-option-delete:hover {
+  background-color: #ffe5e5;
+}

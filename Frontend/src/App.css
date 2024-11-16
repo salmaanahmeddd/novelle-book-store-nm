@@ -1,0 +1,390 @@
+:root {
+  --primary-color: #6366f1;
+  --primary-gradient-end: #4f46e5;
+  --secondary-color: #30343F;
+  --tertiary-color: #DCDCDC;
+  --error-color: #E63946;
+  --optional-color: #6B788E;
+  --text-color-primary: #141A26;
+  --text-color-secondary: #4a4e59;
+  --border-color: #dfe2e6;
+  --border-focus-color: #243757;
+  --placeholder-color: #A0AEC0;
+  --background-light: #ffffff;
+  --background-file-input: #f5f5f7;
+}
+
+button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.fs-container {
+  background: #F5F6F7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.primary-button {
+  font-family: "DM Sans", sans-serif;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--background-light);
+  border: 1px solid #818cf8;
+  background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-gradient-end) 100%);
+  transition: opacity 0.2s ease-in-out;
+}
+
+.primary-button:hover {
+  opacity: 0.9;
+}
+
+.primary-button:focus,
+.primary-button:active {
+  outline: none;
+}
+
+.secondary-button {
+  display: flex;
+  padding: 11px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: var(--secondary-color);
+  color: var(--background-light);
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.secondary-button:hover {
+  opacity: 0.9;
+}
+
+.secondary-button:focus,
+.secondary-button:active {
+  outline: none;
+}
+
+.tertiary-button {
+  display: flex;
+  padding: 11px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-color-primary);
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  border-radius: 8px;
+  background: var(--tertiary-color);
+  transition: opacity 0.2s ease-in-out;
+}
+
+.tertiary-button:hover {
+  opacity: 0.8;
+}
+
+.tertiary-button:focus,
+.tertiary-button:active {
+  outline: none;
+}
+
+input,
+select,
+textarea {
+  box-sizing: border-box;
+  font-family: "DM Sans", sans-serif;
+}
+
+.input-text,
+.textarea,
+.dropdown,
+.file-input {
+  background-color: var(--background-light);
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 16px;
+  font-size: 16px;
+  color: var(--text-color-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-text:focus,
+.input-text:hover,
+.textarea:focus,
+.textarea:hover,
+.dropdown:focus,
+.dropdown:hover,
+.file-input:focus,
+.file-input:hover {
+  border-color: var(--border-focus-color);
+  box-shadow: 0 0 3px rgba(36, 55, 87, 0.4);
+  outline: none;
+}
+
+.input-text::placeholder,
+.textarea::placeholder,
+.file-input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.dropdown option[value=""][disabled] {
+  color: var(--placeholder-color);
+  font-style: italic;
+}
+
+
+.textarea {
+  resize: none;
+  height: 130px;
+}
+
+.dropdown {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a4e59' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.dropdown option {
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  color: var(--text-color-secondary);
+  background-color: var(--background-light);
+}
+
+.file-input {
+  background-color: var(--background-file-input);
+  color: var(--text-color-secondary);
+  cursor: pointer;
+}
+
+.buttons-group {
+  margin-top: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--border-focus-color);
+  margin-bottom: 2px;
+  display: block;
+}
+
+.label {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--border-focus-color);
+  margin-bottom: 4px;
+  margin-top: 12px;
+  display: block;
+}
+
+.label--error {
+  color: var(--error-color);
+  font-weight: 600;
+}
+
+.label--optional {
+  color: var(--optional-color);
+  font-weight: 400;
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly darker background for better focus on the popup */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+input:-webkit-autofill {
+  background-color: white !important;
+  color: #141A26 !important;
+  -webkit-text-fill-color: #141A26 !important;
+  border: 1px solid #dfe2e6 !important;
+  box-shadow: none !important;
+}
+
+input:-webkit-autofill::after {
+  background-color: white !important;
+}
+
+input:focus:-webkit-autofill {
+  background-color: white !important;
+  color: #141A26 !important;
+  -webkit-text-fill-color: #141A26 !important;
+  border: 1px solid #dfe2e6 !important;
+}
+
+input[type="password"]:-webkit-autofill {
+  background-color: white !important;
+  color: #141A26 !important;
+  -webkit-text-fill-color: #141A26 !important;
+  border: 1px solid #dfe2e6 !important;
+}
+
+input[type="email"]:-webkit-autofill {
+  background-color: white !important;
+  color: #141A26 !important;
+  -webkit-text-fill-color: #141A26 !important;
+  border: 1px solid #dfe2e6 !important;
+}
+
+/* Popup Card */
+.popup-card {
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  width: 600px; /* Ensure this width works responsively or adjust as needed */
+  max-height: 700px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid #ebedf0;
+  background: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Soften the shadow for more subtle depth */
+  gap: 6px; /* Slightly tighter gap to keep related items closer */
+}
+
+/* Popup Heading */
+.popup-heading {
+  font-family: "DM Sans", sans-serif;
+  font-size: 24px;
+  font-weight: bold; /* Use 'bold' for font-weight to ensure consistency across browsers */
+  color: #243757;
+  margin-bottom: 24px; /* Reduced for tighter integration with the form */
+}
+
+/* Global Custom Scrollbar Styling */
+.scrollable-container::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  background-color: transparent; /* Transparent background */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.0); /* Light shade for the thumb */
+  border-radius: 4px; /* Rounded corners for the thumb */
+  transition: all 0.5s ease;
+}
+
+.scrollable-container:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.4); /* Slightly darker on hover */
+}
+
+.active-tab {
+  background: var(--primary-color);
+  color: var(--background-light);
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: white;
+  color: #A6AEBB;
+  border: none;
+}
+
+.tab.active {
+  background-color: #EEF2FF;
+  color: #312E81;
+  font-weight: 700;
+}
+
+.tab:focus {
+  outline: none;
+}
+
+.swap-link {
+  color: var(--2-colour-themes-Greys-B70, #A6AEBB);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.18px;
+  cursor: pointer;
+  text-align: center;
+  margin-top:10px;
+}
+
+.swap-link {
+  color: var(--2-colour-themes-Greys-B70, #A6AEBB);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.18px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.password-container {
+  position: relative; /* Ensure relative positioning for the eye icon */
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-container input {
+  width: 100%; /* Full width input field */
+  padding-right: 40px; /* Add padding to prevent text from overlapping the icon */
+}
+
+.eye-icon {
+  position: absolute;
+  right: 16px; /* Align with padding */
+  top: 45%; /* Center vertically */
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #4C505A;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.eye-icon:hover {
+  color: var(--text-color-primary); /* Change color on hover for better feedback */
+}
+

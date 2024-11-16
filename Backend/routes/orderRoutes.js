@@ -93,4 +93,46 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Route to update an order by ID
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { bookId, userId, address, state, city, pincode } = req.body;
+
+    try {
+        // Fetch the existing order to update
+        const order = await MyOrders.findById(id);
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        // Update the order fields with the provided data
+        if (bookId) order.bookId = bookId;
+        if (userId) order.userId = userId;
+        if (address) order.address = address;
+        if (state) order.state = state;
+        if (city) order.city = city;
+        if (pincode) order.pincode = pincode;
+
+        // Fetch the book details and update the price if the bookId is changed
+        if (bookId && bookId !== order.bookId.toString()) {
+            const book = await Book.findById(bookId);
+            if (!book) {
+                return res.status(404).json({ error: 'Book not found' });
+            }
+            order.totalAmount = book.price;
+            order.seller = book.sellerId;
+            order.sellerId = book.sellerId;
+        }
+
+        // Save the updated order
+        const updatedOrder = await order.save();
+        res.status(200).json(updatedOrder);
+    } catch (error) {
+        console.error('Error updating order:', error);
+        res.status(500).json({ error: 'Failed to update order', details: error.message });
+    }
+});
+
 module.exports = router;
+
+
