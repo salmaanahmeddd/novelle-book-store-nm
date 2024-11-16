@@ -42,7 +42,7 @@ router.post('/add', verifyToken, upload.single('itemImage'), async (req, res) =>
             description,
             price,
             sellerId,
-            sellerName: req.sellerName
+            sellerName
         });
 
         await newBook.save();

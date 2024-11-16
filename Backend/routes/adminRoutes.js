@@ -3,7 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../db/Admin');
-
+const { verifyToken } = require('../middleware/verifyToken');
+const { authorizeRole } = require('../middleware/authorizeRole');
 
 // Check authentication status
 router.get('/check-auth', (req, res) => {
@@ -44,6 +45,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
     
@@ -68,11 +70,18 @@ router.post('/login', async (req, res) => {
       maxAge:  24 * 60 * 60 * 1000  // 1 hour
     });
   
-    res.status(200).json({ adminId: admin._id,  token, message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful', token, adminId: admin._id, role:'admin' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+router.get('/admin/dashboard', verifyToken, authorizeRole('admin'), (req, res) => {
+  res.status(200).json({ message: 'Welcome to Admin Dashboard' });
+});
+
+
 
 router.get('/admins', async (req, res) => {
   try {

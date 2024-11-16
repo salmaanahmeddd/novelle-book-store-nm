@@ -25,27 +25,12 @@
 }
 
 .overlay-option:hover {
+  cursor: pointer;
   background-color: #f0f0f0;
 }
 
 .overlay-option-delete {
   color: red;
-}
-
-.overlay-close {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  font-size: 12px;
-  color: #777;
-  background: #f5f5f5;
-  border-top: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.overlay-close:hover {
-  background: #e5e5e5;
 }
 
 .orders-action-icon {
@@ -70,6 +55,7 @@
 }
 
 .action-overlay div:hover {
+  cursor: pointer;
   background-color: #f5f5f5;
 }
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../App.css';
 
 const SignupPopup = ({ onClose, onSwapToLogin }) => {
-  const [role, setRole] = useState('users');
+  const [role, setRole] = useState('users'); // Default role is 'users'
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,24 +22,26 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
     const { name, email, password } = formData;
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/${role}/register`, {
-        name,
-        email,
-        password,
-      });
-      alert(response.data.message);
-      onClose();
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/${role}/register`, // Use role dynamically in the endpoint
+        { name, email, password }
+      );
+      alert(response.data.message || 'Signup successful'); // Notify user of success
+      onClose(); // Close popup after successful signup
     } catch (error) {
-      alert('Error signing up');
+      const errorMessage =
+        error.response?.data?.error || 'Error signing up. Please try again.';
+      alert(errorMessage); // Notify user of error
     }
   };
 
   return (
     <div className="popup-overlay" onClick={onClose}>
-      <div className="popup-card scrollable-container" onClick={(e) => e.stopPropagation()} 
-      style={{
-            width:'500px',
-          }}>
+      <div
+        className="popup-card scrollable-container"
+        onClick={(e) => e.stopPropagation()}
+        style={{ width: '500px' }}
+      >
         <h1 className="popup-heading">Create your Account</h1>
 
         {/* Role Selection Tabs */}
@@ -62,7 +64,9 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
 
         {/* Signup Form */}
         <form onSubmit={handleSubmit} className="popup-form">
-          <label className="label" htmlFor="name">Name</label>
+          <label className="label" htmlFor="name">
+            Name
+          </label>
           <input
             type="text"
             id="name"
@@ -74,7 +78,9 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
             required
           />
 
-          <label className="label" htmlFor="email">Email</label>
+          <label className="label" htmlFor="email">
+            Email
+          </label>
           <input
             type="email"
             id="email"
@@ -86,10 +92,12 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
             required
           />
 
-          <label className="label" htmlFor="password">Password</label>
+          <label className="label" htmlFor="password">
+            Password
+          </label>
           <div className="password-container">
             <input
-              type={passwordVisible ? "text" : "password"}
+              type={passwordVisible ? 'text' : 'password'}
               id="password"
               name="password"
               value={formData.password}
@@ -107,14 +115,17 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
             </button>
           </div>
 
-          <button type="submit" className="secondary-button"
-          style={{
-            marginTop:'24px',
-            width:'100%',
-            padding:'16px 10px',
-          }}
-          onClick={handleSubmit}
-          >Signup</button>
+          <button
+            type="submit"
+            className="secondary-button"
+            style={{
+              marginTop: '24px',
+              width: '100%',
+              padding: '16px 10px',
+            }}
+          >
+            Signup
+          </button>
         </form>
 
         <p onClick={onSwapToLogin} className="swap-link">

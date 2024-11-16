@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getToken } from '../utils/storage';
 
-const useAuth = () => {
+const useAuth = (role) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -10,15 +10,27 @@ const useAuth = () => {
     const checkAuth = async () => {
       try {
         const token = getToken();
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/check-auth`, {
-          withCredentials: true,
-          headers: {
-            "access-token": token
+        if (!token) {
+          setIsLoggedIn(false);
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/${role}/check-auth`,
+          {
+            headers: { 'Authorization': `Bearer ${token}` },
+            withCredentials: true,
           }
-        });
-        setIsLoggedIn(response.data.authenticated);
+        );
+
+        if (response.status === 200 && response.data.authenticated) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
       } catch (error) {
-        console.error('Authentication check failed:', error);
+        console.error(`Authentication check failed for ${role}:`, error);
         setIsLoggedIn(false);
       } finally {
         setLoading(false);
@@ -26,7 +38,7 @@ const useAuth = () => {
     };
 
     checkAuth();
-  }, []);
+  }, [role]);
 
   return { isLoggedIn, loading };
 };

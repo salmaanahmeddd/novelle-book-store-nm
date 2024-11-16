@@ -19,25 +19,26 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-
+  
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/${role}/login`, {
         email,
         password,
       });
-
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.userId);
-
+  
+      const { token, userId } = response.data;
+      localStorage.setItem('access-token', token); // Save token
+      localStorage.setItem('userId', userId);
+  
       alert('Login successful');
-      onLoginSuccess();
+      onLoginSuccess(); // Notify parent
       onClose();
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || 'An error occurred. Please try again.';
       alert(errorMessage);
     }
-  };
+  };  
 
   return (
     <div className="popup-overlay" onClick={onClose}>

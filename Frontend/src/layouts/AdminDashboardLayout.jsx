@@ -1,7 +1,7 @@
 // AdminDashboardLayout.jsx
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import ProfileOverlay from '../components/ProfileOverlay';
+import ProfileOverlay from '../components/AdminProfileOverlay';
 import '../../src/styles/admin/AdminDashboard.css';
 
 

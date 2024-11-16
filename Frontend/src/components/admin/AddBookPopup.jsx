@@ -1,142 +1,228 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getToken } from '../../utils/storage'; // Ensure this is correctly imported
+import useAuth from '../../hooks/useAuth'; // Import the useAuth hook
 import '../../App.css';
 
 const AddBookPopup = ({ onClose, onBookAdded }) => {
-    const [bookDetails, setBookDetails] = useState({
-        title: '',
-        author: '',
-        genre: '',
-        description: '',
-        price: '',
-        itemImage: null, // State to hold the image file
-    });
+  const { isLoggedIn, loading } = useAuth(); // Use the hook to check if the user is logged in
+  const [sellers, setSellers] = useState([]);
+  const [formData, setFormData] = useState({
+    sellerId: '',
+    title: '',
+    author: '',
+    genre: '',
+    price: '',
+    image: null,
+  });
+  const [isSellerSelected, setIsSellerSelected] = useState(false);
 
-    const genres = [
-        { id: 'fiction', name: 'Fiction' },
-        { id: 'nonfiction', name: 'Non-fiction' },
-        { id: 'mystery', name: 'Mystery' },
-        { id: 'sci-fi', name: 'Sci-Fi' },
-        { id: 'fantasy', name: 'Fantasy' },
-        { id: 'romance', name: 'Romance' },
-        { id: 'thriller', name: 'Thriller' },
-        { id: 'others', name: 'Others' },
-    ];
-
-    const handleInputChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === 'itemImage') {
-            setBookDetails({ ...bookDetails, [name]: files[0] });
-        } else {
-            setBookDetails({ ...bookDetails, [name]: value });
+  // Fetch sellers for the dropdown
+  useEffect(() => {
+    const fetchSellers = async () => {
+      try {
+        const token = getToken();
+        if (!token) {
+          alert("Authorization token is missing. Please log in.");
+          return;
         }
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/sellers/all`, {
+          headers: {
+            "Authorization": `Bearer ${token}`, // Use the token in the request header
+          }
+        });
+        setSellers(response.data);
+      } catch (error) {
+        console.error("Error fetching sellers:", error);
+      }
     };
+    fetchSellers();
+  }, []);
 
-    const submitBook = async () => {
-        try {
-            const formData = new FormData();
-            formData.append('title', bookDetails.title);
-            formData.append('author', bookDetails.author);
-            formData.append('genre', bookDetails.genre);
-            formData.append('description', bookDetails.description);
-            formData.append('price', bookDetails.price);
-            if (bookDetails.itemImage) {
-                formData.append('itemImage', bookDetails.itemImage);
-            }
+  const handleSellerChange = (e) => {
+    const selectedSeller = sellers.find(seller => seller._id === e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      sellerId: selectedSeller._id,
+    }));
+    setIsSellerSelected(true); // Make other fields visible after selecting a seller
+  };
 
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('access-token')}`,
-                },
-            };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-            const apiURL = import.meta.env.VITE_API_URL || 'http://defaulturl.com';
-            const response = await axios.post(`${apiURL}/books/add`, formData, config);
-            onBookAdded(response.data);
-            onClose();
-        } catch (error) {
-            console.error('Error adding book:', error);
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      image: e.target.files[0],
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const { sellerId, title, author, genre, price, image } = formData;
+  
+    if (!sellerId || !title || !author || !genre || !price || !image) {
+      alert("Please fill in all fields before submitting.");
+      return;
+    }
+  
+    // Create the FormData object
+    const formDataToSend = new FormData();
+    formDataToSend.append('title', title);
+    formDataToSend.append('author', author);
+    formDataToSend.append('genre', genre);
+    formDataToSend.append('price', price);
+    formDataToSend.append('sellerId', sellerId);
+    // formDataToSend.append('itemImage', image); // Make sure 'itemImage' is the correct field name for the image
+  
+    // Log the FormData content to check
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+  
+    const token = getToken(); // Retrieve the token from localStorage
+  
+    if (!token) {
+      alert("Authorization token is missing. Please log in.");
+      return; // Stop further execution if no token
+    }
+  
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/books/add`,
+        formDataToSend,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Use the token in the request header
+            'Content-Type': 'multipart/form-data',
+          },
         }
-    };
+      );
+      onBookAdded(response.data);
+      onClose();
+      alert('Book added successfully');
+    } catch (error) {
+      console.error('Error adding book:', error);
+      alert('Failed to add the book. Please try again.');
+    }
+  };
+  
 
-    return (
-        <div className="popup-overlay" onClick={onClose}>
-            <div className="popup-card scrollable-container" onClick={(e) => e.stopPropagation()}>
-                <h2 className="popup-heading">Add New Book</h2>
-                <form>
-                    <label htmlFor="title" className="label">Title</label>
-                    <input
-                        type="text"
-                        id="title"
-                        placeholder="Title"
-                        name="title"
-                        onChange={handleInputChange}
-                        className="input-text"
-                    />
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-                    <label htmlFor="author" className="label">Author</label>
-                    <input
-                        type="text"
-                        id="author"
-                        placeholder="Author"
-                        name="author"
-                        onChange={handleInputChange}
-                        className="input-text"
-                    />
+  if (!isLoggedIn) {
+    return <div>You are not logged in. Please log in to add a book.</div>;
+  }
 
-                    <label htmlFor="genre" className="label">Genre</label>
-                    <select
-                        id="genre"
-                        name="genre"
-                        value={bookDetails.genre}
-                        onChange={handleInputChange}
-                        className="dropdown"
-                    >
-                        <option value="">Select Genre</option>
-                        {genres.map((genre) => (
-                            <option key={genre.id} value={genre.id}>
-                                {genre.name}
-                            </option>
-                        ))}
-                    </select>
+  return (
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="popup-card" onClick={(e) => e.stopPropagation()}>
+        <h1 className="popup-heading">Add a New Book</h1>
+        <form className="popup-form" onSubmit={handleSubmit}>
+          <label className="label">Seller Name</label>
+          <select
+            name="sellerId"
+            value={formData.sellerId}
+            onChange={handleSellerChange}
+            className="dropdown"
+            required
+          >
+            <option value="">Select a Seller</option>
+            {sellers.map((seller) => (
+              <option key={seller._id} value={seller._id}>
+                {seller.name} ({seller.email})
+              </option>
+            ))}
+          </select>
 
-                    <label htmlFor="description" className="label">Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        placeholder="Description"
-                        onChange={handleInputChange}
-                        className="textarea"
-                    ></textarea>
+          {/* Show the rest of the form only when a seller is selected */}
+          {isSellerSelected && (
+            <>
+              <label className="label">Book Title</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                className="input-text"
+                placeholder="Enter book title"
+                required
+              />
 
-                    <label htmlFor="price" className="label">Price</label>
-                    <input
-                        type="text"
-                        id="price"
-                        placeholder="Price"
-                        name="price"
-                        onChange={handleInputChange}
-                        className="input-text"
-                    />
+              <label className="label">Author</label>
+              <input
+                type="text"
+                name="author"
+                value={formData.author}
+                onChange={handleInputChange}
+                className="input-text"
+                placeholder="Enter author name"
+                required
+              />
 
-                    <label htmlFor="itemImage" className="label">Upload Image</label>
-                    <input
-                        type="file"
-                        id="itemImage"
-                        name="itemImage"
-                        onChange={handleInputChange}
-                        className="file-input"
-                    />
+                <label className="label">Genre</label>
+                <select
+                name="genre"
+                value={formData.genre}
+                onChange={handleInputChange}
+                className="dropdown"
+                required
+                >
+                <option value="">Select Genre</option>
+                {[
+                    'Fiction', 'Non-Fiction', 'Sci-Fi', 'Biography', 'Self-Help', 'Fantasy', 'History',
+                    'Romance', 'Thriller', 'Mystery', 'Adventure', 'Action', 'Horror', 'Children', 
+                    'Young Adult', 'Art', 'Music', 'Cooking', 'Philosophy', 'Politics', 'Economics', 
+                    'Science', 'Psychology', 'Poetry', 'Sports', 'Health', 'Education', 'Travel', 
+                    'Technology', 'Business', 'Humor'
+                ].map((genre, index) => (
+                    <option key={index} value={genre}>{genre}</option>
+                ))}
+                </select>
 
-                    <div className="buttons-group">
-                        <button type="button" className="tertiary-button" onClick={onClose}>Cancel</button>
-                        <button type="button" className="secondary-button" onClick={submitBook}>Add Book</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+              <label className="label">Price</label>
+              <input
+                type="text"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                className="input-text"
+                placeholder="Enter price"
+                required
+              />
+
+              <label className="label">Book Image</label>
+              <input
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+                className="input-file"
+                required
+              />
+            </>
+          )}
+
+          <div className="buttons-group">
+            <button type="button" className="tertiary-button" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="secondary-button">
+              Add Book
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default AddBookPopup;
