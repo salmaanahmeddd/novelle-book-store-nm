@@ -187,7 +187,31 @@ const AddOrderPopup = ({ onClose, onOrderAdded, orderData = null, viewMode = fal
                 ))}
               </select>
 
-              <label className="label">State</label>
+              <label className="label">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="input-text"
+                placeholder="Enter address"
+                required
+                readOnly={viewMode}
+              />
+
+              <label className="label">Pincode</label>
+              <input
+                type="text"
+                name="pincode"
+                value={formData.pincode}
+                onChange={handleChange}
+                className="input-text"
+                placeholder="Enter pincode"
+                required
+                readOnly={viewMode}
+              />
+
+<label className="label">State</label>
               <select
                 name="state"
                 value={formData.state}
@@ -220,30 +244,6 @@ const AddOrderPopup = ({ onClose, onOrderAdded, orderData = null, viewMode = fal
                   </option>
                 ))}
               </select>
-
-              <label className="label">Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="input-text"
-                placeholder="Enter address"
-                required
-                readOnly={viewMode}
-              />
-
-              <label className="label">Pincode</label>
-              <input
-                type="text"
-                name="pincode"
-                value={formData.pincode}
-                onChange={handleChange}
-                className="input-text"
-                placeholder="Enter pincode"
-                required
-                readOnly={viewMode}
-              />
 
               <label className="label">Price</label>
               <input

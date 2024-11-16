@@ -19,7 +19,7 @@ const Orders = () => {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
       setOrders(response.data);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error("Error fetching orders:", error);
     }
   };
 
@@ -42,39 +42,41 @@ const Orders = () => {
     };
   }, [showActionOverlay]);
 
-  const handleActionClick = (event, order) => {
-    event.stopPropagation(); // Prevent triggering document click
+const handleActionClick = (event, order) => {
+  event.stopPropagation(); // Prevent triggering document click
 
-    if (selectedOrder?._id === order._id && showActionOverlay) {
-      // If the same action button is clicked again, close the overlay
-      setShowActionOverlay(false);
-      setSelectedOrder(null);
-      return;
-    }
+  if (selectedOrder?._id === order._id && showActionOverlay) {
+    // If the same action button is clicked again, close the overlay
+    setShowActionOverlay(false);
+    setSelectedOrder(null);
+    return;
+  }
 
-    // Get the bounding box of the action icon
-    const rect = event.currentTarget.getBoundingClientRect();
+  // Get the bounding box of the action icon
+  const rect = event.currentTarget.getBoundingClientRect();
 
-    // Calculate the initial position
-    let top = rect.bottom + window.scrollY;
-    let left = rect.left + window.scrollX;
+  // Calculate the initial position
+  let top = rect.bottom + window.scrollY;
+  let left = rect.left + window.scrollX;
 
-    // Adjust for viewport boundaries
-    const overlayWidth = 150;
-    const overlayHeight = 100;
+  // Adjust for viewport boundaries
+  const overlayWidth = 150;
+  const overlayHeight = 100;
 
-    if (left + overlayWidth > window.innerWidth) {
-      left = window.innerWidth - overlayWidth - 10;
-    }
+  if (left + overlayWidth > window.innerWidth) {
+    left = window.innerWidth - overlayWidth - 10;
+  }
 
-    if (top + overlayHeight > window.innerHeight) {
-      top = rect.top + window.scrollY - overlayHeight - 10;
-    }
+  if (top + overlayHeight > window.innerHeight) {
+    top = rect.top + window.scrollY - overlayHeight - 10;
+  }
 
-    setOverlayPosition({ top, left });
-    setSelectedOrder(order);
-    setShowActionOverlay(true);
-  };
+  setOverlayPosition({ top, left });
+  setSelectedOrder(order);
+  setShowActionOverlay(true);
+};
+
+  
 
   const handleView = () => {
     setViewMode(true);
@@ -89,23 +91,18 @@ const Orders = () => {
   };
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this order?');
+    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
     if (confirmDelete) {
       try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/orders/${selectedOrder._id}`);
-        alert('Order deleted successfully.');
-        fetchOrders(); // Re-fetch orders after deletion
+        setOrders((prevOrders) => prevOrders.filter((order) => order._id !== selectedOrder._id));
+        alert("Order deleted successfully.");
       } catch (error) {
-        console.error('Error deleting order:', error);
-        alert('Failed to delete the order.');
+        console.error("Error deleting order:", error);
+        alert("Failed to delete the order.");
       }
     }
     setShowActionOverlay(false);
-  };
-
-  const handleOrderAddedOrUpdated = () => {
-    fetchOrders(); // Re-fetch orders after add or update
-    setShowAddOrderPopup(false);
   };
 
   const generateOrderID = (orderId) => {
@@ -136,8 +133,7 @@ const Orders = () => {
       {showAddOrderPopup && (
         <AddOrderPopup
           onClose={() => setShowAddOrderPopup(false)}
-          onOrderAdded={handleOrderAddedOrUpdated}
-          onOrderUpdated={handleOrderAddedOrUpdated}
+          onOrderAdded={(newOrder) => setOrders((prevOrders) => [...prevOrders, newOrder])}
           orderData={selectedOrder}
           viewMode={viewMode}
         />
