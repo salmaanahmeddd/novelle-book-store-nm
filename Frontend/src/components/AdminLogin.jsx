@@ -16,22 +16,24 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null); // Clear previous errors
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/admin/login`,
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true } // Ensures cookies are sent cross-origin
       );
 
       if (response.status === 200) {
         const { token } = response.data;
-        setToken(token);
-        navigate('/admin/dashboard');
+        console.log('Login successful. Token received:', token); // Debugging log
+        setToken(token); // Save token to localStorage
+        navigate('/admin/dashboard'); // Redirect to dashboard
       } else {
-        setError('Login failed: No valid response from server.');
+        setError('Login failed. Please try again.');
       }
     } catch (error) {
-      console.error('Login error:', error.response?.data || error);
+      console.error('Login error:', error.response?.data || error.message); // Log error details
       setError(error.response?.data?.message || 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -47,7 +49,7 @@ const AdminLogin = () => {
       >
         <h1 className="popup-heading">Admin Login</h1>
         <form onSubmit={handleSubmit} className="popup-form">
-          <label className="label" style={{marginTop:'0px'}}htmlFor="email">
+          <label className="label" htmlFor="email">
             Email
           </label>
           <input
@@ -79,6 +81,7 @@ const AdminLogin = () => {
               type="button"
               onClick={() => setPasswordVisible(!passwordVisible)}
               className="eye-icon"
+              aria-label="Toggle password visibility"
             >
               {passwordVisible ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -86,11 +89,16 @@ const AdminLogin = () => {
 
           {error && <div className="label--error">{error}</div>}
 
-          <button type="submit" className="secondary-button"  style={{
-            marginTop:'24px',
-            width:'100%',
-            padding:'13px 10px',
-          }} disabled={loading}>
+          <button
+            type="submit"
+            className="secondary-button"
+            style={{
+              marginTop: '24px',
+              width: '100%',
+              padding: '13px 10px',
+            }}
+            disabled={loading}
+          >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
