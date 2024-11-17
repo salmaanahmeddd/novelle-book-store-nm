@@ -21,30 +21,30 @@ const allowedOrigins = [
   'https://novelle-store.vercel.app',
 ];
 
-// // CORS options
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     // Allow requests with no origin (e.g., mobile apps or curl requests)
-//     if (!origin) return callback(null, true);
+// CORS options
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g., mobile apps or curl requests)
+    if (!origin) return callback(null, true);
 
-//     // Check if the origin is in the allowed list
-//     if (allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-//   credentials: true, // Allow cookies to be sent
-// };
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow cookies to be sent
+};
 
-// // Use CORS middleware  
-// app.use(cors(corsOptions));
+// Use CORS middleware  
+app.use(cors(corsOptions));
 
-app.use(cors({
-  origin: 'https://novelle-store.vercel.app',
-  credentials: true, // Allows cookies and Authorization headers
-}));
+// app.use(cors({
+//   origin: 'https://novelle-store.vercel.app',
+//   credentials: true, // Allows cookies and Authorization headers
+// }));
 
 
 app.use(express.json());
