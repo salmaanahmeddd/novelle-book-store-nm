@@ -39,8 +39,8 @@ const BooksList = () => {
             <div className="book-details">
               <h3>{book.title}</h3>
               <p>{book.author}</p>
-              <p>{book.price}</p>
               <p>{book.genre}</p>
+              <p className='price' style={{fontWeight:'800', fontSize:'16px', color:'#30343F'}}>{book.price}</p>
             </div>
           </div>
         ))

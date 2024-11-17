@@ -1,83 +1,117 @@
+/* Prevent horizontal scroll on body */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "DM Sans", sans-serif;
+  overflow-x: hidden; /* Disable horizontal scrolling globally */
+}
+
+body::-webkit-scrollbar{
+  display: none;
+}
+
 /* Container for the list of books */
 .books-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
-    justify-content:space-around;
-    padding: 64px;
-    background: var(--Greys-B20, #F5F6F7); /* Background color */
-  }
-  
-  /* Individual book item container */
-  .book-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-    width: 243px; /* Width for each book container */
-    border-radius: 8px;
-  }
-  
-  /* Book image styling */
-  .book-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover; /* Ensures the image covers the container */
-    border-radius: 8px;
-  }
-  
-  /* Book details section */
-  .book-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    width: 100%; /* Ensure it stretches fully */
-  }
-  
+  width: 100vw;
+  min-height: 100vh;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 5 items per row */
+  gap: 48px;
+  padding: 128px 64px;
+  background: var(--Greys-B20, #F5F6F7); /* Background color */
+  overflow-x: hidden;
+}
+
+
+/* Individual book item container */
+.book-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  border-radius: 8px;
+}
+
+/* Book image styling */
+.book-image {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover; /* Ensures the image covers the container */
+  /* border-radius: 5px; */
+}
+
+/* Book details section */
+.book-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%; /* Ensure it stretches fully */
+}
   /* Title styling */
   .book-details h3 {
     color: var(--colors-black-600, #30343F);
     font-family: "DM Sans", sans-serif;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 800;
     line-height: 1.4;
     letter-spacing: -0.5px;
     margin: 0;
+    text-overflow: ellipsis; /* Add ellipsis for overflow */
+    display: -webkit-box; /* Enable multi-line truncation */
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical; /* Vertical box orientation */
+    word-wrap: break-word; /* Ensure long words break properly */
+    overflow: hidden;
   }
   
   /* Author, Price, and Genre styling */
   .book-details p {
     color: var(--colors-black-500, #4C505A);
     font-family: "DM Sans", sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
     letter-spacing: -0.12px;
     margin: 0;
   }
-  
-  /* Price styling to make it stand out */
-  .book-details p.price {
-    color: var(--colors-black-600, #30343F);
-    font-weight: 600;
-    font-size: 16px;
-    letter-spacing: -0.5px;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .book-item {
-      width: 48%; /* 2 books per row on mobile */
-    }
-  
+
+  @media (max-width: 1440px) {
     .books-list {
-      gap: 24px; /* Reduce the gap for mobile */
+        grid-template-columns: repeat(5, 1fr); /* 3 items per row */
+        gap: 24px; /* Reduce gap for tablets */
     }
-  }
-  
-  @media (max-width: 480px) {
-    .book-item {
-      width: 100%; /* 1 book per row on very small screens */
+}
+
+/* Mobile: 1 item per row */
+@media (max-width: 1024px) {
+    .books-list {
+        grid-template-columns: repeat(3,1fr); /* 1 item per row */
+        padding: 128px 24px; /* Reduce padding for smaller screens */
+        gap: 20px; /* Reduce gap for mobile */
     }
-  }
-  
+    /* Individual book item container */
+
+.book-item{
+  margin-bottom: 24px;
+}
+
+}
+/* Mobile: 1 item per row */
+@media (max-width: 430px) {
+    .books-list {
+        grid-template-columns: repeat(2,1fr); /* 1 item per row */
+        padding: 128px 24px; /* Reduce padding for smaller screens */
+        gap: 20px; /* Reduce gap for mobile */
+    }
+    /* Individual book item container */
+
+.book-item{
+  margin-bottom: 24px;
+}
+
+.book-details h3{
+  font-size: 16px;
+}
+
+}

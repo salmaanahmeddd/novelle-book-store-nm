@@ -8,6 +8,7 @@ body, html {
 }
 
 .header {
+  position: fixed;
   display: flex;
   justify-content: space-between;
   padding: 16px 64px;
@@ -70,4 +71,10 @@ body, html {
 .signup-button:focus {
   outline: none;
   box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 24px;
+  }
 }
