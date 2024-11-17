@@ -39,29 +39,36 @@ router.get('/check-auth', (req, res) => {
 });
 
 
-
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    // Check if the seller already exists
     const existingSeller = await Seller.findOne({ email });
     if (existingSeller) {
       return res.status(400).json({ error: 'Seller already exists' });
     }
 
+    // Hash the password and save the new seller
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newSeller = new Seller({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
+    const newSeller = new Seller({ name, email, password: hashedPassword });
     await newSeller.save();
-    res.status(201).json({ message: 'Seller registered successfully' });
 
+    // Generate a token
+    const token = jwt.sign(
+      { sellerId: newSeller._id, role: 'seller' }, // Payload
+      process.env.JWT_SECRET,                     // Secret key
+      { expiresIn: '1h' }                         // Token expiration
+    );
+
+    // Return success message along with the token
+    res.status(201).json({
+      message: 'Signup successful',
+      token, // Include the token in the response
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error registering seller', details: error.message });
+    console.error('Error during seller registration:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

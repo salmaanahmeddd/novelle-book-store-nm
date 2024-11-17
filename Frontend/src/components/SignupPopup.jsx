@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { setUserToken, setSellerToken } from '../utils/storage';
 import '../App.css';
 
-const SignupPopup = ({ onClose, onSwapToLogin }) => {
+const SignupPopup = ({ onClose, onSwapToLogin, onSignupSuccess }) => {
   const [role, setRole] = useState('users'); // Default role is 'users'
   const [formData, setFormData] = useState({
     name: '',
@@ -11,6 +13,7 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
     password: '',
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,15 +26,44 @@ const SignupPopup = ({ onClose, onSwapToLogin }) => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/${role}/register`, // Use role dynamically in the endpoint
+        `${import.meta.env.VITE_API_URL}/${role}/register`,
         { name, email, password }
       );
-      alert(response.data.message || 'Signup successful'); // Notify user of success
-      onClose(); // Close popup after successful signup
+
+      console.log('Response from server:', response);
+
+      const { token, message } = response.data;
+      if (!token) {
+        throw new Error('Token is missing from the server response');
+      }
+
+      // Save the token dynamically based on the role
+      if (role === 'users') {
+        setUserToken(token);
+      } else if (role === 'sellers') {
+        setSellerToken(token);
+      }
+
+      alert(message || 'Signup successful');
+
+      // Notify parent about signup success
+      if (onSignupSuccess) {
+        onSignupSuccess();
+      }
+
+      // Redirect the user to the home or dashboard page
+      if (role === 'users') {
+        navigate('/'); // Replace with actual user dashboard route
+      } else if (role === 'sellers') {
+        navigate('/'); // Replace with actual seller dashboard route
+      }
+
+      onClose(); // Close the popup
     } catch (error) {
+      console.error('Error during signup:', error.response?.data || error.message);
       const errorMessage =
         error.response?.data?.error || 'Error signing up. Please try again.';
-      alert(errorMessage); // Notify user of error
+      alert(errorMessage);
     }
   };
 

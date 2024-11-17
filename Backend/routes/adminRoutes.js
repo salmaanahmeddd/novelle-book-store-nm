@@ -74,13 +74,6 @@ router.post('/login', async (req, res) => {
       
     const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Set cookie with HttpOnly flag
-    // res.cookie('authToken', token, {
-    //   httpOnly: true,
-    //   secure: true, // Set secure to true if in production
-    //   // sameSite: 'Strick', // Helps prevent CSRF
-    //   maxAge:  24 * 60 * 60 * 1000  // 1 hour
-    // });
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true, // Must be true in production with HTTPS

@@ -44,24 +44,32 @@ router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
+    // Hash the password and save the new user
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' });
 
+    // Generate a token
+    const token = jwt.sign(
+      { userId: newUser._id, role: 'user' }, // Payload
+      process.env.JWT_SECRET,               // Secret key
+      { expiresIn: '1h' }                   // Token expiration
+    );
+
+    // Return success message along with the token
+    res.status(201).json({
+      message: 'Signup successful',
+      token, // Include the token in the response
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error registering user', details: error.message });
+    console.error('Error during registration:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -140,5 +148,54 @@ router.get('/user/dashboard', verifyToken, authorizeRole('user'), (req, res) => 
   res.status(200).json({ message: 'Welcome to User Dashboard' });
 });
 
+
+router.put('/:id', verifyToken, authorizeRole('admin'), async (req, res) => {
+  const { id } = req.params;
+  const { name, email, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update name and email
+    if (name) user.name = name;
+    if (email) user.email = email;
+
+    // Handle password change if applicable
+    if (currentPassword && newPassword) {
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ error: 'Current password is incorrect' });
+      }
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    // Save updated user
+    const updatedUser = await user.save();
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Failed to update user. Please try again.' });
+  }
+});
+
+// Delete User
+router.delete('/:id', verifyToken, authorizeRole('admin'), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Failed to delete user. Please try again.' });
+  }
+});
 
 module.exports = router;

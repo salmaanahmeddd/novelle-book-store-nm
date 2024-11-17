@@ -84,7 +84,13 @@ const Header = () => {
           onLoginSuccess={handleLoginSuccess}
         />
       )}
-      {showSignupPopup && <SignupPopup onClose={() => setShowSignupPopup(false)} />}
+      {showSignupPopup && (
+        <SignupPopup
+          onClose={() => setShowSignupPopup(false)}
+          onSignupSuccess={handleLoginSuccess} // Reuse login success handler
+        />
+      )}
+
 
       {showProfileOverlay && role === 'user' && (
         <UserProfileOverlay onClose={() => setShowProfileOverlay(false)} onLogout={handleLogout} />
