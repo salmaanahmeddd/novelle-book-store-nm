@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import LoginPopup from './LoginPopup';
 import SignupPopup from './SignupPopup';
-import AdminProfileOverlay from './AdminProfileOverlay';
 import UserProfileOverlay from './UserProfileOverlay';
-import SellerProfileOverlay from './SellerProfileOverlay';
-import { getToken, clearToken } from '../utils/storage';
+import { getUserToken, getSellerToken, clearUserToken, clearSellerToken } from '../utils/storage';
 import '../styles/Header.css';
 import '../App.css';
 
@@ -16,27 +14,27 @@ const Header = () => {
   const [showSignupPopup, setShowSignupPopup] = useState(false);
 
   useEffect(() => {
-    const token = getToken();
-    if (token) {
+    const userToken = getUserToken();
+    const sellerToken = getSellerToken();
+
+    if (userToken) {
       setIsAuthenticated(true);
-      try {
-        const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
-        setRole(decodedToken.role || 'user'); // Set role: 'admin', 'user', or 'seller'
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
+      setRole('user'); // Set role based on token presence
+    } else if (sellerToken) {
+      setIsAuthenticated(true);
+      setRole('seller'); // Set role based on token presence
     }
   }, []);
 
   const handleLoginSuccess = () => {
-    const token = getToken(); // Get the token after login
-    setIsAuthenticated(true);
+    const userToken = getUserToken();
+    const sellerToken = getSellerToken();
 
-    try {
-      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
-      setRole(decodedToken.role || 'user'); // Set role immediately after login
-    } catch (error) {
-      console.error('Error decoding token:', error);
+    setIsAuthenticated(true);
+    if (userToken) {
+      setRole('user'); // Set role immediately after login
+    } else if (sellerToken) {
+      setRole('seller'); // Set role immediately after login
     }
 
     setShowLoginPopup(false);
@@ -44,7 +42,12 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    clearToken(); // Clear token from localStorage
+    if (role === 'user') {
+      clearUserToken(); // Clear user token
+    } else if (role === 'seller') {
+      clearSellerToken(); // Clear seller token
+    }
+
     setIsAuthenticated(false); // Reset authenticated state
     setRole(null); // Clear role state
     setShowProfileOverlay(false); // Close profile overlay
@@ -83,14 +86,11 @@ const Header = () => {
       )}
       {showSignupPopup && <SignupPopup onClose={() => setShowSignupPopup(false)} />}
 
-      {showProfileOverlay && role === 'admin' && (
-        <AdminProfileOverlay onClose={() => setShowProfileOverlay(false)} onLogout={handleLogout} />
-      )}
       {showProfileOverlay && role === 'user' && (
         <UserProfileOverlay onClose={() => setShowProfileOverlay(false)} onLogout={handleLogout} />
       )}
       {showProfileOverlay && role === 'seller' && (
-        <SellerProfileOverlay onClose={() => setShowProfileOverlay(false)} onLogout={handleLogout} />
+        <UserProfileOverlay onClose={() => setShowProfileOverlay(false)} onLogout={handleLogout} />
       )}
     </header>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { setUserToken, setSellerToken } from '../utils/storage'; // Import role-specific storage
 import '../App.css';
 
 const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
@@ -19,32 +20,41 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-  
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/${role}/login`, {
         email,
         password,
       });
-  
+
       const { token, userId } = response.data;
-      localStorage.setItem('access-token', token); // Save token
-      localStorage.setItem('userId', userId);
-  
+
+      // Save token based on role
+      if (role === 'users') {
+        setUserToken(token);
+      } else if (role === 'sellers') {
+        setSellerToken(token);
+      }
+
       alert('Login successful');
       onLoginSuccess(); // Notify parent
-      onClose();
+      onClose(); // Close popup
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || 'An error occurred. Please try again.';
       alert(errorMessage);
     }
-  };  
+  };
 
   return (
     <div className="popup-overlay" onClick={onClose}>
-      <div className="popup-card scrollable-container" onClick={(e) => e.stopPropagation()}style={{
-            width:'500px',
-          }}>
+      <div
+        className="popup-card scrollable-container"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: '500px',
+        }}
+      >
         <h1 className="popup-heading">Login to your Account</h1>
 
         {/* Role Selection Tabs */}
@@ -67,7 +77,9 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="popup-form">
-          <label className="label" htmlFor="email">Email</label>
+          <label className="label" htmlFor="email">
+            Email
+          </label>
           <input
             type="email"
             id="email"
@@ -79,7 +91,9 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
             required
           />
 
-          <label className="label" htmlFor="password">Password</label>
+          <label className="label" htmlFor="password">
+            Password
+          </label>
           <div className="password-container">
             <input
               type={passwordVisible ? 'text' : 'password'}
@@ -100,14 +114,17 @@ const LoginPopup = ({ onClose, onLoginSuccess, onSwapToSignup }) => {
             </button>
           </div>
 
-          <button type="submit" className="secondary-button"
-          style={{
-            marginTop:'24px',
-            width:'100%',
-            padding:'13px 10px',
-          }}
-          onClick={handleSubmit}
-          >Login</button>
+          <button
+            type="submit"
+            className="secondary-button"
+            style={{
+              marginTop: '24px',
+              width: '100%',
+              padding: '13px 10px',
+            }}
+          >
+            Login
+          </button>
         </form>
 
         {/* Swap to Signup */}

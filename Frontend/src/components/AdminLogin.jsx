@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { setToken } from '../utils/storage';
+import { setAdminToken } from '../utils/storage'; // Updated import
 import '../App.css';
 
 const AdminLogin = () => {
@@ -27,7 +27,7 @@ const AdminLogin = () => {
       if (response.status === 200) {
         const { token } = response.data;
         console.log('Login successful. Token received:', token); // Debugging log
-        setToken(token); // Save token to localStorage
+        setAdminToken(token); // Save admin token to localStorage
         navigate('/admin/dashboard'); // Redirect to dashboard
       } else {
         setError('Login failed. Please try again.');

@@ -8,27 +8,36 @@ const { authorizeRole } = require('../middleware/authorizeRole');
 const router = express.Router();
 
 // Check authentication status for sellers
+// Check authentication status
 router.get('/check-auth', (req, res) => {
-  const headerToken = req.headers["access-token"];
-  const token = req.cookies.authToken || headerToken;
-  console.log('Token received for seller:', token); // Debugging: Check token
-  
-  if (!token) {
-    return res.status(401).json({ authenticated: false });
-  }
-  
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.role !== 'seller') {
-      return res.status(403).json({ authenticated: false, error: 'Access denied. Seller role required.' });
+    // Check for the token in Authorization header (preferred) or cookies (fallback)
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.split(' ')[1] || req.cookies.authToken;
+
+    console.log('Token received:', token); // Debugging: Ensure token is received
+
+    if (!token) {
+      return res.status(401).json({ authenticated: false, error: 'Token not provided' });
     }
-    console.log('Token valid for seller:', decoded); // Debugging: Token details
+
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log('Decoded token info:', decoded); // Debugging: Log decoded token details
+
+    // Check if the token belongs to an admin
+    if (!decoded.adminId) {
+      return res.status(403).json({ authenticated: false, error: 'Invalid token for admin' });
+    }
+
     res.status(200).json({ authenticated: true });
   } catch (error) {
-    console.error('Seller token verification error:', error);
-    res.status(401).json({ authenticated: false });
+    console.error('Error verifying token:', error.message);
+    res.status(401).json({ authenticated: false, error: 'Invalid or expired token' });
   }
 });
+
 
 
 router.post('/register', async (req, res) => {
@@ -100,9 +109,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/seller/dashboard', verifyToken, authorizeRole('seller'), (req, res) => {
-  res.status(200).json({ message: 'Welcome to Seller Dashboard' });
-});
 
 
 router.get('/all', async (req, res) => {
@@ -141,5 +147,10 @@ router.post('/logout', (req, res) => {
   });
   res.json({ message: 'Logged out successfully' });
 });
+
+router.get('/seller/dashboard', verifyToken, authorizeRole('seller'), (req, res) => {
+  res.status(200).json({ message: 'Welcome to Seller Dashboard' });
+});
+
 
 module.exports = router;

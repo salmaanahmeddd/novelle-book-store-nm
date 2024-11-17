@@ -8,19 +8,31 @@ const { authorizeRole } = require('../middleware/authorizeRole');
 
 // Check authentication status
 router.get('/check-auth', (req, res) => {
-  const headerToken = req.headers["access-token"];
-  const token = req.cookies.authToken || headerToken;
-  console.log('Token received:', token);  // Check the token is received correctly
-  if (!token) {
-    return res.status(401).json({ authenticated: false });
-  }
   try {
+    // Check for the token in Authorization header (preferred) or cookies (fallback)
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.split(' ')[1] || req.cookies.authToken;
+
+    console.log('Token received:', token); // Debugging: Ensure token is received
+
+    if (!token) {
+      return res.status(401).json({ authenticated: false, error: 'Token not provided' });
+    }
+
+    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Token valid, decoded info:', decoded);  // Log decoded token info
+
+    console.log('Decoded token info:', decoded); // Debugging: Log decoded token details
+
+    // Check if the token belongs to an admin
+    if (!decoded.adminId) {
+      return res.status(403).json({ authenticated: false, error: 'Invalid token for admin' });
+    }
+
     res.status(200).json({ authenticated: true });
   } catch (error) {
-    console.error('Token verification error:', error);
-    res.status(401).json({ authenticated: false });
+    console.error('Error verifying token:', error.message);
+    res.status(401).json({ authenticated: false, error: 'Invalid or expired token' });
   }
 });
 
@@ -69,26 +81,18 @@ router.post('/login', async (req, res) => {
     //   // sameSite: 'Strick', // Helps prevent CSRF
     //   maxAge:  24 * 60 * 60 * 1000  // 1 hour
     // });
-
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true, // Must be true in production with HTTPS
       sameSite: 'None', // Required for cross-origin requests
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
-    
+  
     res.status(200).json({ message: 'Login successful', token, adminId: admin._id, role:'admin' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
-
-router.get('/admin/dashboard', verifyToken, authorizeRole('admin'), (req, res) => {
-  res.status(200).json({ message: 'Welcome to Admin Dashboard' });
-});
-
-
 
 router.get('/admins', async (req, res) => {
   try {
@@ -177,6 +181,10 @@ router.put('/:id', async (req, res) => {
       console.error('Error updating order:', error);
       res.status(500).json({ error: 'Failed to update order', details: error.message });
   }
+});
+
+router.get('/admin/dashboard', verifyToken, authorizeRole('admin'), (req, res) => {
+  res.status(200).json({ message: 'Welcome to Admin Dashboard' });
 });
 
 module.exports = router;
