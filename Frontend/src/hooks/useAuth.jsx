@@ -2,17 +2,24 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getToken } from '../utils/storage';
 
+/**
+ * Custom hook to check authentication status
+ * @param {string} role - The role to authenticate (e.g., 'admin')
+ * @returns {{ isLoggedIn: boolean, loading: boolean }}
+ */
 const useAuth = (role) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
+      setLoading(true); // Start loading
+      setIsLoggedIn(false); // Default to not logged in
+
       const token = getToken();
 
       if (!token) {
         console.warn('No token found in localStorage. User is not logged in.');
-        setIsLoggedIn(false);
         setLoading(false);
         return;
       }
@@ -24,9 +31,9 @@ const useAuth = (role) => {
           `${import.meta.env.VITE_API_URL}/${role}/check-auth`,
           {
             headers: {
-              'Authorization': `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
-            withCredentials: true, // Ensures cookies are sent for cross-origin requests
+            withCredentials: true, // Include cookies for cross-origin requests
           }
         );
 
@@ -35,7 +42,7 @@ const useAuth = (role) => {
         if (response.status === 200 && response.data.authenticated) {
           setIsLoggedIn(true);
         } else {
-          console.warn('Authentication failed or user not authorized.');
+          console.warn('Authentication failed or user is not authorized.');
           setIsLoggedIn(false);
         }
       } catch (error) {
@@ -44,9 +51,8 @@ const useAuth = (role) => {
           response: error.response?.data || 'No response data',
           headers: error.config?.headers,
         });
-        setIsLoggedIn(false);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading
       }
     };
 

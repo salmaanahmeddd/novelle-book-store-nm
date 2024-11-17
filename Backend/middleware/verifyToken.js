@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const verifyToken = (req, res, next) => {
   // Extract token from Authorization header
   const token = req.header('Authorization')?.replace('Bearer ', '');
+  console.log('Authorization header:', req.header('Authorization'));
+  
   if (!token) {
     console.error('No token provided in Authorization header');
     return res.status(403).json({ error: 'Authorization token required' });
