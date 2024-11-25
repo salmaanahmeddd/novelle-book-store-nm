@@ -13,6 +13,9 @@ Novelle is a comprehensive online bookstore application developed using the MERN
 ### **Backend** (Hosted on [Render](https://render.com)):
 - **Base Endpoint**: [https://novelle.onrender.com](https://novelle.onrender.com)
 
+### **Demo Video** 
+- **Link**: [View the full video here](https://drive.google.com/drive/folders/1mpySmPubfOlK0fZLStXln7KCIcinelqR?usp=sharing)
+
 ---
 
 ## **Table of Contents**
